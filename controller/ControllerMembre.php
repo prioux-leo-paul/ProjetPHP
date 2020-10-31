@@ -73,7 +73,8 @@ class ControllerMembre {
                     $_SESSION['numMembre'] = $userinfo['numMembre'];
                     $_SESSION['pseudoMembre'] = $userinfo['pseudoMembre'];
                     $_SESSION['mailMembre'] = $userinfo['mailMembre'];
-                    header("Location: profil.php?id=".$_SESSION['id']);
+                    $membre = new ModelMembres(array("pseudoMembre"=>$_SESSION['pseudoMembre'],"mailMembre"=>$_SESSION['mailMembre'],"mdpMembre"=>$mdpconnect));
+                    //header("Location: profil.php?id=".$_SESSION['numMembre']);
                 }
                 else{
                     $erreur = "Mauvais mail ou mot de passe !";
