@@ -89,7 +89,7 @@ class ControllerMembre {
     public static function logout(){
     $_SESSION = array();
     session_destroy();
-    header("Location: index.php");
+    header("Location: ../controller/router.php?action=Home");
     }
 
 
