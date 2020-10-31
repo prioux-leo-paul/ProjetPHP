@@ -1,16 +1,8 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-require_once '../config/Conf.php';
-/**
- * Description of Model
- *
- * @author giaccagliam
- */
+
+require_once File::buildpath(array("config","Conf.php"));
+
 class Model {
     
     static public $pdo;

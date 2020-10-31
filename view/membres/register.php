@@ -1,4 +1,4 @@
-
+<html>
 	<body>
 		<div align="center">
 				<h2>Inscription</h2>

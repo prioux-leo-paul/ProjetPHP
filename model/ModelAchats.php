@@ -1,5 +1,5 @@
 <?php
-require_once 'Model.php';
+require_once File::buildpath(array("model","Model.php"));
 class ModelAchats {
 
     private numClient;

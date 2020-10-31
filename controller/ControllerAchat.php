@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once ('../model/ModelAchats.php'); // chargement du modèle
+require_once File::buildpath(array("model","ModelAchats.php")); // chargement du modèle
 
 class ControllerMembre {
 

@@ -15,7 +15,7 @@
 				}
 				?>
 				<br>
-				Pas encore de compte ?<a href="../controller/router.php?action=formregister">S'inscrire</a>
+				Pas encore de compte ?<a href="index.php?action=formregister">S'inscrire</a>
 		</div>
 	</body>
 </html>
