@@ -4,12 +4,16 @@ require_once ('../model/ModelMembres.php'); // chargement du modèle
 
 class ControllerMembre {
 
+    public static function Home() {
+        require ('../view/Home.php');
+    }
+
     public static function formregister() {
         require ('../view/Membres/register.php');
     }
 
     public static function register(){
-        require_once('../model/ModelMembres.php');
+        require_once ('../model/ModelMembres.php');
         $pseudo = htmlspecialchars($_GET['pseudo']);
         $mail = htmlspecialchars($_GET['mail']);
         $mail2 = htmlspecialchars($_GET['mail2']);
@@ -66,10 +70,9 @@ class ControllerMembre {
                 if($userexist == 1){
                     //creation de session et redirection
                     $userinfo = $requser->fetch();
-                    $_SESSION['id'] = $userinfo['id'];
-                    $_SESSION['pseudo'] = $userinfo['pseudo'];
-                    $_SESSION['mail'] = $userinfo['mail'];
-                    $_SESSION['perm'] = $userinfo['perm'];
+                    $_SESSION['numMembre'] = $userinfo['numMembre'];
+                    $_SESSION['pseudoMembre'] = $userinfo['pseudoMembre'];
+                    $_SESSION['mailMembre'] = $userinfo['mailMembre'];
                     header("Location: profil.php?id=".$_SESSION['id']);
                 }
                 else{

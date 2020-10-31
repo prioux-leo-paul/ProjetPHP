@@ -11,7 +11,7 @@
         <div class="sidebar">
             <h2>Slide-Shop</h2>
             <ul>
-                <li><a href="index.php">Home</a></li>
+                <li><a href="../controller/router.php?action=Home">Home</a></li>
                 <li><a href="#">Profile</a></li>
                 <li><a href="../controller/router.php?action=formlogin">Connexion</a></li>
                 <li><a href="../controller/router.php?action=logout">Deconnexion</a></li>

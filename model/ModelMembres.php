@@ -5,11 +5,13 @@ class ModelMembres {
     private pseudoMembre;
     private mailMembre;
     private mdpMembre; 
+    private panierMembre;
 
     public function __construct($pseudoMembre, $mailMembre, $mdpMembre){
         $this->pseudoMembre = $pseudoMembre;
         $this->mail = $mailMembre;
         $this->mdp = $mdpMembre;
+        $this->panierMembre = array();
     }
 
     public function save() {
@@ -33,6 +35,13 @@ class ModelMembres {
         }
     }
 
+    public function ajouterPanier($produit){
+        $this->panierMembre = array($produit,$this->panierMembre);
+    }
+
+    public function getAllCommande(){
+        
+    }
 
 
 
