@@ -16,7 +16,7 @@
                 <li><a href="#">Profile</a></li>
                 <li><a href="index.php?action=formlogin">Connexion</a></li>
                 <li><a href="index.php?action=logout">Deconnexion</a></li>
-                <li><a href="index.php/router.php?action=formregister">S'inscrire</a></li>
+                <li><a href="index.php?action=formregister">S'inscrire</a></li>
                 <li><a href="#">Contact</a></li>
                 <li><a href="#">Map</a></li>
             </ul> 

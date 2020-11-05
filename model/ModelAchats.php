@@ -2,10 +2,10 @@
 require_once File::buildpath(array("model","Model.php"));
 class ModelAchats {
 
-    private numClient;
-    private numProduit;
-    private qteAchat;
-    private dateAchat; 
+    private $numClient;
+    private $numProduit;
+    private $qteAchat;
+    private $ateAchat; 
 
     public function __construct($numClient, $numProduit, $qteAchat){
         $this->numClient = $numClient;
@@ -29,7 +29,8 @@ class ModelAchats {
             if (Conf::getDebug()) {
                 echo $e->getMessage(); // affiche un message d'erreur
             } else {
-                echo "Votre compte a bien été creer ! <a href=\"../controller/router.php?action=formlogin\">Me connecter</a>";
+                $lien = File::buildpath(array("controller","routeur.php?action=Home",))
+                echo "Votre achats a bien été fait! <a href=\"".$lien."\">Home</a>";
             }
             die();
         }
@@ -40,3 +41,4 @@ class ModelAchats {
 
 
 }
+?>

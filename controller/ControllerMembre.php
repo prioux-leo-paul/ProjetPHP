@@ -8,18 +8,19 @@ class ControllerMembre {
         $controller = "membres";
         $view = "Home";
         $pagetitle = "Page d'acceuil";
-        require File::buildpath(array("view","view"));
+        require File::buildpath(array("view","view.php"));
     }
 
     public static function formregister() {
         $controller = "membres";
         $view = "register";
         $pagetitle = "S'enregistrer";
-        require File::builpath(array("view","view"));
+        require File::buildpath(array("view","view.php"));
     }
 
     public static function register(){
-        require_once ('../model/ModelMembres.php');
+        session_start();
+        require_once File::buildpath(array("model","ModelMembres.php"));
         $pseudo = htmlspecialchars($_GET['pseudo']);
         $mail = htmlspecialchars($_GET['mail']);
         $mail2 = htmlspecialchars($_GET['mail2']);
@@ -61,11 +62,11 @@ class ControllerMembre {
         $pagetitle = "Se connecter";
         $controller = "membres";
         $view = "login";
-        require File::buildpath(array("view","view"));
+        require File::buildpath(array("view","view.php"));
     }
 
     public static function login(){
-        require_once File::path(array('model','ModelMembres.php'));
+        require_once File::buildpath(array('model','ModelMembres.php'));
         $formconnexion = $_GET['formconnexion'];
         $mailconnect = htmlspecialchars($_GET['mailconnect']);
         $mdpconnect = sha1($_GET['mdpconnect']);
@@ -75,9 +76,10 @@ class ControllerMembre {
     public static function logout(){
     $_SESSION = array();
     session_destroy();
-    header("Location: ../controller/router.php?action=Home");
+    header("Location: index.php?action=Home");
     }
 
 
     
 }
+?>

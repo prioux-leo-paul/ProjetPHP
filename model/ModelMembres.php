@@ -1,12 +1,13 @@
 <?php
+session_start();
 require_once File::buildpath(array("model","Model.php"));
 class ModelMembres {
 
-    private numMembre;
-    private pseudoMembre;
-    private mailMembre;
-    private mdpMembre; 
-    private panierMembre;
+    private $numMembre;
+    private $pseudoMembre;
+    private $mailMembre;
+    private $mdpMembre;
+    private $panierMembre;
 
     public function __construct($pseudoMembre, $mailMembre, $mdpMembre){
         $this->numMembre = null;
@@ -31,7 +32,8 @@ class ModelMembres {
             if (Conf::getDebug()) {
                 echo $e->getMessage(); // affiche un message d'erreur
             } else {
-                echo "Votre compte a bien été creer ! <a href=\"../controller/router.php?action=formlogin\">Me connecter</a>";
+                $lien = File::buildpath(array("controller","routeur.php?action=formlogin"));
+                echo "Votre compte a bien été creer ! <a href=\"".$lien."\">Me connecter</a>";
             }
             die();
         }
@@ -44,7 +46,7 @@ class ModelMembres {
     
 
     public static function verifMembre($formconnexion, $mailconnect, $mdpconnect){
-        session_start();
+
         if (isset($formconnexion)) {
             //verifie si le mdp et le mail sont bon
             if (!empty($mdpconnect) AND !empty($mailconnect)) {
@@ -59,7 +61,7 @@ class ModelMembres {
                     $_SESSION['mailMembre'] = $userinfo['mailMembre'];
                     $membre = new ModelMembres(array("pseudoMembre"=>$_SESSION['pseudoMembre'],"mailMembre"=>$_SESSION['mailMembre'],"mdpMembre"=>$mdpconnect));
                     $membre->setnumMembre($_SESSION['numMembre']);
-                    //header("Location: profil.php?id=".$_SESSION['numMembre']);
+                    header("Location: index.php?action=Home");
                 }
                 else{
                     $erreur = "Mauvais mail ou mot de passe !";
@@ -71,7 +73,7 @@ class ModelMembres {
         }
     }
 
-    public function setnumMembre($numMembre){
+    private function setnumMembre($numMembre){
         $this->numMembre = $numMembre;
     }
 
@@ -88,3 +90,4 @@ class ModelMembres {
         }
     }
 }
+?>

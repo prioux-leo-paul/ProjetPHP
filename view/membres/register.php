@@ -2,7 +2,7 @@
 	<body>
 		<div align="center">
 				<h2>Inscription</h2>
-				<form method="GET" action="../controller/router.php?action=register">
+				<form method="GET" action="../index.php?action=register">
 					<table>
 						<tr>
 							<td align="right">
@@ -53,13 +53,8 @@
 					</table>
 
 				</form>
-                <?php
-				if (isset($erreur)) {
-					echo '<font color="red">'.$erreur."</font>";
-				}
-				?>
 				<br>
-				Déjà un compte ? <a href="../controller/router.php?action=formlogin">Connexion</a>
+				Déjà un compte ? <a href="index.php?action=formlogin">Connexion</a>
 		</div>
 	</body>
 </html>
