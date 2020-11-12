@@ -2,6 +2,7 @@
 
 require_once File::buildpath(array("controller","ControllerMembre.php"));
 require_once File::buildpath(array("controller","ControllerAchat.php"));
+require_once File::buildpath(array("controller","ControllerProduit.php"));
 
 $action = isset($_GET['action']) ?  $_GET['action'] : "Home";
 $controller = isset($_GET['controller']) ? $_GET['controller'] : "membre";

@@ -26,6 +26,18 @@ class Model {
             die();
         }
     }
+
+    public static function selectAll(){
+        $table_name = static::$object;
+        $class_name = 'Model'.ucfirst($table_name);
+        $sql = 'SELECT * FROM '.$table_name;
+        $rep = Model::$pdo->query($sql);
+        $rep->setFetchMode(Model::$pdo::FETCH_CLASS, $class_name);
+        $tab = $rep->fetchAll();
+        return $tab;
+      }
+    
+    
 }
 //Ceci est un test
 Model::Init();

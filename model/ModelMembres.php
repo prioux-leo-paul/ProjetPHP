@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once File::buildpath(array("model","Model.php"));
-class ModelMembres {
+class ModelMembres extends Model {
 
     private $numMembre;
     private $pseudoMembre;
