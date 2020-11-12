@@ -9,6 +9,7 @@ class ModelMembres {
     private $mdpMembre;
     private $panierMembre;
 
+
     public function __construct($pseudoMembre, $mailMembre, $mdpMembre){
         $this->numMembre = null;
         $this->pseudoMembre = $pseudoMembre;
@@ -19,7 +20,7 @@ class ModelMembres {
 
     public function save() {
         try {
-            $sql = "INSERT INTO PRODUITS ( pseudoMembre, mailMembre, mdpMembre) VALUES (?,?,?)";
+            $sql = "INSERT INTO MEMBRES ( pseudoMembre, mailMembre, mdpMembre) VALUES (?,?,?)";
             
             // Préparation de la requête
             $req_prep = Model::$pdo->prepare($sql);
@@ -45,12 +46,12 @@ class ModelMembres {
 
     
 
-    public static function verifMembre($formconnexion, $mailconnect, $mdpconnect){
+    public static function verifMembre( $mailconnect, $mdpconnect){
 
-        if (isset($formconnexion)) {
+       
             //verifie si le mdp et le mail sont bon
             if (!empty($mdpconnect) AND !empty($mailconnect)) {
-                $requser = $bdd->prepare("SELECT * FROM membres WHERE mail = ? AND motdepasse = ?");
+                $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre = ? AND mdpMembre = ?");
                 $requser->execute(array($mailconnect,$mdpconnect));
                 $userexist = $requser->rowCount();
                 if($userexist == 1){
@@ -61,16 +62,17 @@ class ModelMembres {
                     $_SESSION['mailMembre'] = $userinfo['mailMembre'];
                     $membre = new ModelMembres(array("pseudoMembre"=>$_SESSION['pseudoMembre'],"mailMembre"=>$_SESSION['mailMembre'],"mdpMembre"=>$mdpconnect));
                     $membre->setnumMembre($_SESSION['numMembre']);
-                    header("Location: index.php?action=Home");
+                    echo "c'est bon";
+                    
                 }
                 else{
-                    $erreur = "Mauvais mail ou mot de passe !";
+                   echo "Mauvais mail ou mot de passe !";
                 }
             }
             else{
-                $erreur = "Tous les champs doivent être complété !";
+                echo "Tous les champs doivent être complété !";
             }
-        }
+    
     }
 
     private function setnumMembre($numMembre){
@@ -79,7 +81,7 @@ class ModelMembres {
 
 
     public static function userexist($mail){
-        $reqmail = $bdd->prepare("SELECT * FROM membres WHERE mail= ?");
+        $reqmail = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
         $reqmail->execute(array($mail));
         $mailexist = $reqmail->rowCount();
         if ($mailexist == 0){

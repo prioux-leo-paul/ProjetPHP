@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once File::buildpath(array("model","ModelMembres.php")); // chargement du modèle
 
 class ControllerMembre {
@@ -9,6 +9,7 @@ class ControllerMembre {
         $view = "Home";
         $pagetitle = "Page d'acceuil";
         require File::buildpath(array("view","view.php"));
+        
     }
 
     public static function formregister() {
@@ -19,13 +20,12 @@ class ControllerMembre {
     }
 
     public static function register(){
-        session_start();
         require_once File::buildpath(array("model","ModelMembres.php"));
-        $pseudo = htmlspecialchars($_GET['pseudo']);
-        $mail = htmlspecialchars($_GET['mail']);
-        $mail2 = htmlspecialchars($_GET['mail2']);
-        $mdp = sha1($_GET['mdp']);
-        $mdp2 = sha1($_GET['mdp2']);
+        $pseudo = htmlspecialchars($_POST['pseudo']);
+        $mail = htmlspecialchars($_POST['mail']);
+        $mail2 = htmlspecialchars($_POST['mail2']);
+        $mdp = sha1($_POST['mdp']);
+        $mdp2 = sha1($_POST['mdp2']);
         $pseudolength = strlen($pseudo);
         if (!empty($pseudo) AND !empty($mail) AND !empty($mail2) AND !empty($mdp) AND !empty($mdp2)) {
             //verification des info
@@ -35,25 +35,26 @@ class ControllerMembre {
                             $testmail = ModelMembres::userexist($mail);
                             if($testmail == false){
                                 if($mdp == $mdp2){
-                                $membre = new ModelMembres(array("pseudoMembre"=>$pseudo,"mailMembre"=>$mail,"mdpMembre"=>$mdp));
+                                $membre = new ModelMembres($pseudo,$mail,$mdp);
                                 $saveok = $membre->save();
+                                header("Location: index.php?action=formlogin");
                                 }else {
-                                    $erreur = "Vos mot de passe ne corresponde pas !";
+                                    echo "Vos mot de passe ne corresponde pas !";
                                 }
                             }else {
-                                $erreur = "Adresse mail déjà utilisée !";
+                                echo "Adresse mail déjà utilisée !";
                             }
                         }else {
-                            $erreur = "Votre adresse mail n'est pas valide !";
+                            echo "Votre adresse mail n'est pas valide !";
                         }
                     }else {
-                        $erreur = "Vos adresse mail ne corresponde pas !";
+                        echo "Vos adresse mail ne corresponde pas !";
                     }    
             } else {
-                $erreur ="Votre pseudo doit contenir moins de 255 charactère !";
+                echo "Votre pseudo doit contenir moins de 255 charactère !";
             }
         } else{ 
-            $erreur ="Tous les champs doivent etre complété !";
+            echo "Tous les champs doivent etre complété !";
 
         }
     }
@@ -66,11 +67,18 @@ class ControllerMembre {
     }
 
     public static function login(){
+        ControllerMembre::formlogin();
         require_once File::buildpath(array('model','ModelMembres.php'));
-        $formconnexion = $_GET['formconnexion'];
-        $mailconnect = htmlspecialchars($_GET['mailconnect']);
-        $mdpconnect = sha1($_GET['mdpconnect']);
-        ModelMembres::verifMembre($formconnexion, $mailconnect, $mailconnect);
+        $formconnexion = $_POST['formconnexion'];
+        $mailconnect = htmlspecialchars($_POST['mailconnect']);
+        $mdpconnect = sha1($_POST['mdpconnect']);
+        if(!isset($formconnexion)){
+        echo ModelMembres::verifMembre( $mailconnect, $mailconnect);
+        }
+        else{
+            echo "tous les champs doivent être compléter";
+        }
+        
     }
 
     public static function logout(){

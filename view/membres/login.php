@@ -2,7 +2,7 @@
     <body>
         <div align="center">
                 <h2>Connexion</h2>
-                <form method="GET" action="index.php?action=login">
+                <form method="POST" action="index.php?action=login">
                     <input type="mail" name="mailconnect" placeholder="Mail">
                     <input type="password" name="mdpconnect" placeholder="Mot de passe">
                     <br>

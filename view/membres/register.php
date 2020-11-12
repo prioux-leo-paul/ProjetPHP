@@ -2,7 +2,7 @@
 	<body>
 		<div align="center">
 				<h2>Inscription</h2>
-				<form method="GET" action="../index.php?action=register">
+				<form method="POST" action="index.php?action=register">
 					<table>
 						<tr>
 							<td align="right">
