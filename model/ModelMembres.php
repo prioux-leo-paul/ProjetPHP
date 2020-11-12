@@ -2,7 +2,8 @@
 session_start();
 require_once File::buildpath(array("model","Model.php"));
 class ModelMembres extends Model {
-
+    protected static $object = "membres";
+    protected static $primary = "numMembre";
     private $numMembre;
     private $pseudoMembre;
     private $mailMembre;

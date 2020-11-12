@@ -1,6 +1,7 @@
 <?php
 require_once File::buildpath(array("model","Model.php"));
 class ModelProduit extends Model {
+    protected static $primary = "numProduit";
     protected static $object = "produits";
     private $numProduit;
     private $nomProduit;
@@ -23,11 +24,6 @@ class ModelProduit extends Model {
             return $this->$nom_attribut;
         return false;
     }
-    public function getNom(){
-        return $this->$nomProduit;
-    }
-
-    
     
 }
 ?>
