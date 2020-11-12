@@ -95,7 +95,7 @@ class ControllerMembre {
         echo $_SESSION['pseudoMembre'];
 
 
-        echo "Mes comandes"
+        echo "Mes comandes";
         
     }
 
