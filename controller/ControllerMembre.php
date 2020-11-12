@@ -69,15 +69,12 @@ class ControllerMembre {
     public static function login(){
         ControllerMembre::formlogin();
         require_once File::buildpath(array('model','ModelMembres.php'));
-        $formconnexion = $_POST['formconnexion'];
+        
         $mailconnect = htmlspecialchars($_POST['mailconnect']);
         $mdpconnect = sha1($_POST['mdpconnect']);
-        if(!isset($formconnexion)){
-        echo ModelMembres::verifMembre( $mailconnect, $mailconnect);
-        }
-        else{
-            echo "tous les champs doivent être compléter";
-        }
+        
+        $test = ModelMembres::verifMembre( $mailconnect, $mailconnect);
+        echo $test;
         
     }
 

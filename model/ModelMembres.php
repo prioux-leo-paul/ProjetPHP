@@ -51,7 +51,7 @@ class ModelMembres {
        
             //verifie si le mdp et le mail sont bon
             if (!empty($mdpconnect) AND !empty($mailconnect)) {
-                $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre = ? AND mdpMembre = ?");
+                $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ? AND mdpMembre= ?");
                 $requser->execute(array($mailconnect,$mdpconnect));
                 $userexist = $requser->rowCount();
                 if($userexist == 1){
@@ -60,17 +60,17 @@ class ModelMembres {
                     $_SESSION['numMembre'] = $userinfo['numMembre'];
                     $_SESSION['pseudoMembre'] = $userinfo['pseudoMembre'];
                     $_SESSION['mailMembre'] = $userinfo['mailMembre'];
-                    $membre = new ModelMembres(array("pseudoMembre"=>$_SESSION['pseudoMembre'],"mailMembre"=>$_SESSION['mailMembre'],"mdpMembre"=>$mdpconnect));
+                    $membre = new ModelMembres($_SESSION['pseudoMembre'],$_SESSION['mailMembre'],$mdpconnect);
                     $membre->setnumMembre($_SESSION['numMembre']);
-                    echo "c'est bon";
+                    return "c'est bon";
                     
                 }
                 else{
-                   echo "Mauvais mail ou mot de passe !";
+                   return "Mauvais mail ou mot de passe !";
                 }
             }
             else{
-                echo "Tous les champs doivent être complété !";
+                return "Tous les champs doivent être complété !";
             }
     
     }
