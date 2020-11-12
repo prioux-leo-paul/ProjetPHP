@@ -48,13 +48,19 @@ class ModelMembres {
 
     public static function verifMembre( $mailconnect, $mdpconnect){
 
-       
+            $mailconnect =htmlspecialchars($mailconnect);
+            $mdpconnect=sha1($mailconnect);
             //verifie si le mdp et le mail sont bon
             if (!empty($mdpconnect) AND !empty($mailconnect)) {
-                $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ? AND mdpMembre= ?");
-                $requser->execute(array($mailconnect,$mdpconnect));
-                $userexist = $requser->rowCount();
-                if($userexist == 1){
+
+                $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
+                $requser->execute(array($mailconnect));
+                $requser2 = Model::$pdo->prepare("SELECT mailMembre FROM MEMBRES WHERE mdpMembre= ?");
+                $requser2->execute(array($mdpconnect));
+                $user = $requser2->fetch();
+                $userexist = $requser->rowcount();
+                
+                if($user == $mailconnect){
                     //creation de session et redirection
                     $userinfo = $requser->fetch();
                     $_SESSION['numMembre'] = $userinfo['numMembre'];
@@ -62,7 +68,7 @@ class ModelMembres {
                     $_SESSION['mailMembre'] = $userinfo['mailMembre'];
                     $membre = new ModelMembres($_SESSION['pseudoMembre'],$_SESSION['mailMembre'],$mdpconnect);
                     $membre->setnumMembre($_SESSION['numMembre']);
-                    return "c'est bon";
+                    return true;
                     
                 }
                 else{
@@ -91,5 +97,11 @@ class ModelMembres {
             return true;
         }
     }
+
+    public static function commandeAll($numMembre){
+        $req = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE numMembre= ?");
+        $req->execute(array($numMembre));
+    }
 }
+
 ?>

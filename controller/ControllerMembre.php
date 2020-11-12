@@ -70,11 +70,17 @@ class ControllerMembre {
         ControllerMembre::formlogin();
         require_once File::buildpath(array('model','ModelMembres.php'));
         
-        $mailconnect = htmlspecialchars($_POST['mailconnect']);
-        $mdpconnect = sha1($_POST['mdpconnect']);
+        $mailconnect = $_POST['mailconnect'];
+        $mdpconnect = $_POST['mdpconnect'];
         
         $test = ModelMembres::verifMembre( $mailconnect, $mailconnect);
-        echo $test;
+        if ($test ==true ){
+            header("Location: index.php?action=Home");
+        }
+        else{
+            echo $test;
+        }
+        
         
     }
 
@@ -82,6 +88,15 @@ class ControllerMembre {
     $_SESSION = array();
     session_destroy();
     header("Location: index.php?action=Home");
+    }
+
+
+    public static function profile(){
+        echo $_SESSION['pseudoMembre'];
+
+
+        echo "Mes comandes"
+        
     }
 
 
