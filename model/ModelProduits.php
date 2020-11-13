@@ -1,8 +1,8 @@
 <?php
 require_once File::buildpath(array("model","Model.php"));
-class ModelProduit extends Model {
+class ModelProduits extends Model {
     protected static $primary = "numProduit";
-    protected static $object = "produits";
+    protected static $object = "PRODUITS";
     private $numProduit;
     private $nomProduit;
     private $numCategorie;

@@ -17,6 +17,7 @@
                 <li><a href="index.php?action=formlogin">Connexion</a></li>
                 <li><a href="index.php?action=logout">Deconnexion</a></li>
                 <li><a href="index.php?action=formregister">S'inscrire</a></li>
+                <li><a href="index.php?controller=produit&action=allproduit">Produit</a></li>
                 <li><a href="#">Contact</a></li>
                 <li><a href="#">Map</a></li>
             </ul> 
@@ -26,7 +27,7 @@
               <a href="#"><i class="fab fa-instagram"></i></a>
           </div>
         </div>
-        <div class="main_content">
+        <div class="main_content" align="center">
             <?php
                 $filepath = File::buildpath(array("view", $controller, "$view.php"));
                 require $filepath;

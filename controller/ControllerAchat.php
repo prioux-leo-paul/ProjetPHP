@@ -1,8 +1,7 @@
 <?php
-session_start();
 require_once File::buildpath(array("model","ModelAchats.php")); // chargement du modèle
 
-class ControllerMembre {
+class ControllerAchat {
 
     public static function commander() {
         if("voir si le stock est suffisant"){
