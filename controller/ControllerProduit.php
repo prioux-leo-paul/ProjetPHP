@@ -30,7 +30,7 @@ class ControllerProduit {
         $tab = ModelProduits::selectAll();
         foreach($tab as $u){
                 echo  "Produit : ".$u["nomProduit"]."\n";
-                echo  "Prix : ".$u["prixProduit"]."\n";
+                echo  "Prix : ".$u["prix"]."\n";
                 echo "Taille : ".$u["tailleProduit"]."\n";
                 echo  "Description : ".$u["descriptionProduit"]."\n \n";
         }

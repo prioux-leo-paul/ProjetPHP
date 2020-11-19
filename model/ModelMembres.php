@@ -11,22 +11,24 @@ class ModelMembres extends Model {
     private $panierMembre;
 
 
-    public function __construct($pseudoMembre, $mailMembre, $mdpMembre){
+    public function __construct($pseudoMembre, $mailMembre, $mdpMembre, $confirmkey){
         $this->numMembre = null;
         $this->pseudoMembre = $pseudoMembre;
         $this->mail = $mailMembre;
         $this->mdp = $mdpMembre;
         $this->panierMembre = array();
+        $this->confirmCompte = 0;
+        $this->confirmKey = $confirmkey;
     }
 
     public function save() {
         try {
-            $sql = "INSERT INTO MEMBRES ( pseudoMembre, mailMembre, mdpMembre) VALUES (?,?,?)";
+            $sql = "INSERT INTO MEMBRES ( pseudoMembre, mailMembre, mdpMembre, confirmCompte,confirmKey) VALUES (?,?,?,?,?)";
             
             // Préparation de la requête
             $req_prep = Model::$pdo->prepare($sql);
 
-            $values = array( $this->pseudoMembre, $this->mail, $this->mdp);
+            $values = array( $this->pseudoMembre, $this->mail, $this->mdp, 0 , $this->confirmKey);
             // On donne les valeurs et on exécute la requête	 
             $req_prep->execute($values);
             
@@ -80,6 +82,25 @@ class ModelMembres extends Model {
                 return "Tous les champs doivent être complété !";
             }
     
+    }
+
+    public static function getconfirmcompte($mail){
+        $req = Model::$pdo->prepare("SELECT confirmCompte FROM MEMBRES WHERE mailMembre= ?");
+        $req->execute(array($mail));
+        
+        return $req->fetch();
+    }
+
+    public static function getconfirmkey($pseudo){
+        $req = Model::$pdo->prepare("SELECT confirmKey FROM MEMBRES WHERE mailMembre= ?");
+        $req->execute(array($mail));
+
+        return $req->fetch();
+    }
+
+    public static function compteconfirmer($mail,$Key){
+        $updateuser = Model::$pdo->prepare("UPDATE MEMBRES SET confirmCompte = 1 WHERE mailMembre = ? AND confirmKey = ?");
+        $updateuser->execute(array($mail,$Key));
     }
 
     private function setnumMembre($numMembre){

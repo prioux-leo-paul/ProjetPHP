@@ -35,9 +35,29 @@ class ControllerMembre {
                             $testmail = ModelMembres::userexist($mail);
                             if($testmail == false){
                                 if($mdp == $mdp2){
-                                $membre = new ModelMembres($pseudo,$mail,$mdp);
-                                $saveok = $membre->save();
-                                header("Location: index.php?action=formlogin");
+                                    $longueurKey = 12;
+                                    $Key = "";
+                                    for($i=1;$i<$longueurKey;$i++){
+                                        $Key .= mt_rand(0,9);
+                                    }
+                                    $membre = new ModelMembres($pseudo,$mail,$mdp,$Key);
+                                    $saveok = $membre->save();
+
+                                    //envoie du mail 
+                                    $header="MIME-Version: 1.0\r\n";
+                                    $header.='From: "site.com"<lp.prioux@gmail.com>'."\n";
+                                    $header.='Content-Type:text/html; cherset="uft_8"'."\n";
+                                    $header.='Content-Transfert-Encoding: 8bit';
+                                    $message = '<html>
+                                    <body>
+                                    <div align="centerr">
+                                    <a href="http://localhost/ProjetPHP/index.php?controller=membre&action=confirmcompte&mailMembre='.urlencode($mail).'&confirmKey='.$Key.'">Confirmation de votre compte !</a>
+                                    </div>
+                                    </body>
+                                    </hmtl>';
+
+                                    mail($mail,"Confirmation de compte",$message,$header);
+                                    header("Location: index.php?action=formlogin");
                                 }else {
                                     echo "Vos mot de passe ne corresponde pas !";
                                 }
@@ -75,7 +95,11 @@ class ControllerMembre {
         
         $test = ModelMembres::verifMembre( $mailconnect, $mailconnect);
         if ($test ==true ){
-            header("Location: index.php?action=Home");
+            if(getconfirmcompte() == 1)
+                header("Location: index.php?action=Home");
+            else{
+                echo "Votre compte n'es toujours pas confirmer";
+            }
         }
         else{
             echo $test;
@@ -83,6 +107,23 @@ class ControllerMembre {
         
         
     }
+
+    public static function confirmcompte(){
+        if(isset($_GET['mailMembre'],$_GET['confirmKey']) AND !empty($_GET['mailMembre']) AND !empty($_GET['confirmKey'])){
+            $mail= htmlspecialchars(urldecode($_GET['mailMembre']));
+            $key = intval($_GET['confirmKey']);
+                if(ModelMembres::getconfirmcompte($mail) == 0){
+                    if(ModelMembres::getconfirmkey($mail) == $key)
+                        ModelMembres::confirmcompte($mail,$key);
+                    echo "Votre compte a bien été confirmé !";
+                }else{
+                    echo "Votre compte a déja été confirmé !";
+                }
+            }else{
+                    echo "l'utilisateur n'existe pas !";
+                }
+}
+    
 
     public static function logout(){
     $_SESSION = array();
