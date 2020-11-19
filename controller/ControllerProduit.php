@@ -29,10 +29,10 @@ class ControllerProduit {
         require (File::buildpath(array("view","view.php")));
         $tab = ModelProduits::selectAll();
         foreach($tab as $u){
-                echo  "Produit : ".$u["nomProduit"]."\n";
-                echo  "Prix : ".$u["prix"]."\n";
-                echo "Taille : ".$u["tailleProduit"]."\n";
-                echo  "Description : ".$u["descriptionProduit"]."\n \n";
+                echo  "Produit : ".$u->get("nomProduit")."\n";
+                echo  "Prix : ".$u->get("prix")."\n";
+                echo "Taille : ".$u->get("tailleProduit")."\n";
+                echo  "Description : ".$u->get("descriptionProduit")."\n \n";
         }
         
     }

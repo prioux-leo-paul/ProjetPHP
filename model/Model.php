@@ -27,19 +27,29 @@ class Model {
         }
     }
 
-    public static function selectAll(){
-        $table_name = static::$object;
-        $class_name = 'Model'.ucfirst($table_name);
-        $sql = 'SELECT * FROM '.$table_name;
-        $rep = Model::$pdo->query($sql);
-        $rep->setFetchMode(Model::$pdo::FETCH_CLASS, $class_name);
-        $tab = $rep->fetchAll();
-        return $tab;
-      }
+    public static function selectAll() {
+        try {
+            $pdo = self::$pdo;
+            $table_name = static::$object;
+            $class_name = 'Model' . ucfirst(static::$object);
+            $sql = "SELECT * from $table_name";
+            $rep = $pdo->query($sql);
+            $rep->setFetchMode(PDO::FETCH_CLASS, $class_name);
+            return $rep->fetchAll();
+        } catch (PDOException $e) {
+            if (Conf::getDebug()) {
+                echo $e->getMessage(); // affiche un message d'erreur
+            } else {
+                echo 'Une erreur est survenue <a href=""> retour a la page d\'accueil </a>';
+            }
+            die();
+        }
+    }
     
     
     public static function selectPrimary($primary_value){
         try {
+            $pdo = self::$pdo;
             $table_name = static::$object;
             $class_name = "Model".ucfirst($table_name);
             $primary_key = static::$primary;

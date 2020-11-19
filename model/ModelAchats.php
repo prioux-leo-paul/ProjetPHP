@@ -8,10 +8,12 @@ class ModelAchats {
     private $ateAchat; 
 
     public function __construct($numClient, $numProduit, $qteAchat){
-        $this->numClient = $numClient;
-        $this->numProduit = $numProduit;
-        $this->qteAchat = $qteAchat;
-        $this->dateAchat = getdate();
+        if ( !is_null($numClient) && !is_null($numProduit)&& !is_null($qteAchat)){
+            $this->numClient = $numClient;
+            $this->numProduit = $numProduit;
+            $this->qteAchat = $qteAchat;
+            $this->dateAchat = getdate();
+        }
     }
 
     public function save() {

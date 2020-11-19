@@ -11,14 +11,19 @@ class ModelMembres extends Model {
     private $panierMembre;
 
 
-    public function __construct($pseudoMembre, $mailMembre, $mdpMembre, $confirmkey){
-        $this->numMembre = null;
-        $this->pseudoMembre = $pseudoMembre;
-        $this->mail = $mailMembre;
-        $this->mdp = $mdpMembre;
-        $this->panierMembre = array();
-        $this->confirmCompte = 0;
-        $this->confirmKey = $confirmkey;
+    public function __construct($pseudoMembre = NULL, $mailMembre = NULL, $mdpMembre = NULL){
+        if ( !isnull($pseudoMembre) && !is_null($mailMembre) && !is_null($mdpMembre)){
+            $this->numMembre = null;
+            $this->pseudoMembre = $pseudoMembre;
+            $this->mail = $mailMembre;
+            $this->mdp = $mdpMembre;
+            $this->panierMembre = array();
+       }
+    }
+    public function get($nom_attribut) {
+        if (property_exists($this, $nom_attribut))
+            return $this->$nom_attribut;
+        return false;
     }
 
     public function save() {
