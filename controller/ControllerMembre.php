@@ -3,6 +3,13 @@
 require_once File::buildpath(array("model","ModelMembres.php")); // chargement du modèle
 
 class ControllerMembre {
+    public static function Error() {
+        $controller = "membres";
+        $view = "error";
+        $pagetitle = "Erreur";
+        require File::buildpath(array("view","view.php"));
+        
+    }
 
     public static function Home() {
         $controller = "membres";
@@ -95,7 +102,7 @@ class ControllerMembre {
         
         $test = ModelMembres::verifMembre( $mailconnect, $mailconnect);
         if ($test ==true ){
-            if(getconfirmcompte() == 1)
+            if(ModelMembres::confirm($mailconnect,"confirmCompte") == 1)
                 header("Location: index.php?action=Home");
             else{
                 echo "Votre compte n'es toujours pas confirmer";
@@ -110,11 +117,12 @@ class ControllerMembre {
 
     public static function confirmcompte(){
         if(isset($_GET['mailMembre'],$_GET['confirmKey']) AND !empty($_GET['mailMembre']) AND !empty($_GET['confirmKey'])){
-            $mail= htmlspecialchars(urldecode($_GET['mailMembre']));
-            $key = intval($_GET['confirmKey']);
-                if(ModelMembres::getconfirmcompte($mail) == 0){
-                    if(ModelMembres::getconfirmkey($mail) == $key)
-                        ModelMembres::confirmcompte($mail,$key);
+            $mail= urldecode($_GET['mailMembre']);
+            $key = $_GET['confirmKey'];
+            
+                if( ModelMembres::getwithmail($mail,'confirmCompte') == 0){
+                    if(ModelMembres::getwithmail($mail,'confirmKey') == $key)
+                        ModelMembres::compteconfirmer($mail,$key);
                     echo "Votre compte a bien été confirmé !";
                 }else{
                     echo "Votre compte a déja été confirmé !";
@@ -122,7 +130,7 @@ class ControllerMembre {
             }else{
                     echo "l'utilisateur n'existe pas !";
                 }
-}
+    }
     
 
     public static function logout(){

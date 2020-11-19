@@ -9,15 +9,19 @@ class ModelMembres extends Model {
     private $mailMembre;
     private $mdpMembre;
     private $panierMembre;
+    private $confirmCompte;
+    private $confirmKey;
 
 
-    public function __construct($pseudoMembre = NULL, $mailMembre = NULL, $mdpMembre = NULL){
-        if ( !isnull($pseudoMembre) && !is_null($mailMembre) && !is_null($mdpMembre)){
+    public function __construct($pseudoMembre = NULL, $mailMembre = NULL, $mdpMembre = NULL , $confirmCompte = NULL ,$confirmKey = NULL){
+        if ( !isnull($pseudoMembre) && !is_null($mailMembre) && !is_null($mdpMembre) && !is_null($confirmCompte) && !is_null($confirmKey)){
             $this->numMembre = null;
             $this->pseudoMembre = $pseudoMembre;
             $this->mail = $mailMembre;
             $this->mdp = $mdpMembre;
             $this->panierMembre = array();
+            $this->$confirmCompte = $confirmCompte;
+            $this->$confirmKey = $confirmKey;
        }
     }
     public function get($nom_attribut) {
@@ -66,7 +70,7 @@ class ModelMembres extends Model {
                 $requser2 = Model::$pdo->prepare("SELECT mailMembre FROM MEMBRES WHERE mdpMembre= ?");
                 $requser2->execute(array($mdpconnect));
                 $user = $requser2->fetch();
-                $userexist = $requser->rowcount();
+                
                 
                 if($user == $mailconnect){
                     //creation de session et redirection
@@ -89,19 +93,14 @@ class ModelMembres extends Model {
     
     }
 
-    public static function getconfirmcompte($mail){
-        $req = Model::$pdo->prepare("SELECT confirmCompte FROM MEMBRES WHERE mailMembre= ?");
-        $req->execute(array($mail));
-        
-        return $req->fetch();
+    public static function getwithmail($mailconnect,$valeur){
+        $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
+        $requser->execute(array($mailconnect));
+        $user = $requser->fetch();
+        return $user[$valeur];
     }
 
-    public static function getconfirmkey($pseudo){
-        $req = Model::$pdo->prepare("SELECT confirmKey FROM MEMBRES WHERE mailMembre= ?");
-        $req->execute(array($mail));
-
-        return $req->fetch();
-    }
+    
 
     public static function compteconfirmer($mail,$Key){
         $updateuser = Model::$pdo->prepare("UPDATE MEMBRES SET confirmCompte = 1 WHERE mailMembre = ? AND confirmKey = ?");

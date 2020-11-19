@@ -30,11 +30,11 @@ class Model {
     public static function selectAll() {
         try {
             $pdo = self::$pdo;
-            $table_name = static::$object;
-            $class_name = 'Model' . ucfirst(static::$object);
-            $sql = "SELECT * from $table_name";
+            $tablename = static::$object;
+            $classname = 'Model' . ucfirst(static::$object);
+            $sql = "SELECT * from $tablename";
             $rep = $pdo->query($sql);
-            $rep->setFetchMode(PDO::FETCH_CLASS, $class_name);
+            $rep->setFetchMode(PDO::FETCH_CLASS, $classname);
             return $rep->fetchAll();
         } catch (PDOException $e) {
             if (Conf::getDebug()) {
