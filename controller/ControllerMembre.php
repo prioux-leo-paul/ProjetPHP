@@ -2,6 +2,7 @@
 
 require_once File::buildpath(array("model","ModelMembres.php")); // chargement du modèle
 
+
 class ControllerMembre {
     public static function Error() {
         $controller = "membres";
@@ -100,10 +101,15 @@ class ControllerMembre {
         $mailconnect = $_POST['mailconnect'];
         $mdpconnect = $_POST['mdpconnect'];
         
-        $test = ModelMembres::verifMembre( $mailconnect, $mailconnect);
-        if ($test ==true ){
-            if(ModelMembres::confirm($mailconnect,"confirmCompte") == 1)
-                header("Location: index.php?action=Home");
+        $test = ModelMembres::verifMembre( $mailconnect, $mdpconnect);
+
+        if ($test == true){
+            if(ModelMembres::getwithmail($mailconnect,"confirmCompte") == 1){
+                $_SESSION['pseudoMembre'] = ModelMembres::getwithmail($mailconnect, "pseudoMembre");
+                $_SESSION['mailMembre'] = $mailconnect;
+                $_SESSION['numMembre'] = ModelMembres::getwithmail($mailconnect, "numMembre");
+                header("Location: index.php?action=profile");
+            }
             else{
                 echo "Votre compte n'es toujours pas confirmer";
             }
@@ -141,13 +147,63 @@ class ControllerMembre {
 
 
     public static function profile(){
-        echo $_SESSION['pseudoMembre'];
-
-
-        echo "Mes comandes";
+        $pagetitle = "Profil";
+        $controller = "membres";
+        $view = "Profile";
+        require File::buildpath(array("view","view.php"));
         
     }
 
+    public static function formediterprofile(){
+        $pagetitle = "Editer Profil";
+        $controller = "membres";
+        $view = "editerprofile";
+        require File::buildpath(array("view","view.php"));
+    }
+
+    public static function editerprofile(){
+        ControllerMembre::formediterprofile();
+        $newpseudo = $_GET['newpseudo'];
+        $newmail = $_GET['newmail'];
+        $newmdp1 = $_GET['newmdp1'];
+        $newmdp2 = $_GET['newmdp2'];
+        
+        if(isset($_SESSION['numMembre'])){
+            if(isset($newpseudo) && $newpseudo != $_SESSION['pseudoMembre']){
+                ModelMembres::updateMembre("pseudoMembre",$newpseudo);
+            }
+            if(isset($newmail) && $newmail != $_SESSION['mailMembre']){
+                ModelMembres::updateMembre("mailMembre",$newmail);
+            }
+            if(isset($newmdp2) && isset($newmdp1) && $newmdp1 == $newmdp2){
+                ModelMembres::updateMembre("mdpMembre",$newmdp1);
+            }
+            header("Location: index.php?action=profile");
+        }
+        else {
+            echo "veuillez remplir au moins un champs !";
+        }
+
+    }
+    public static function supprofile(){
+        /*?>
+        <script >
+ 
+        if ( confirm( "Etes vous sûr de vouloir supprimer votre compte" ) ) {
+            <?php*/
+        ModelMembres::supprimerMembre();
+        header("Location: index.php?action=Home");
+        /*?>
+        } else {
+            <?php
+        
+        header("Location: index.php?action=profile");
+        ?>
+        }
+        </script>
+        <?php*/
+    
+    }
 
     
 }

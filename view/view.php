@@ -1,3 +1,7 @@
+<?php
+require_once File::buildpath(array("model","ModelMembres.php")); // chargement du modèle
+
+?>
 <html>
 <head>
     <meta charset="utf-8">
@@ -13,10 +17,18 @@
             <h2>Slide-Shop</h2>
             <ul>
                 <li><a href="index.php?action=Home">Home</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="index.php?action=formlogin">Connexion</a></li>
+                <?php
+                if(isset($_SESSION['numMembre'])){
+                ?>
+                <li><a href="index.php?action=profile">Profile</a></li>
                 <li><a href="index.php?action=logout">Deconnexion</a></li>
+                <?php
+                }
+                else{
+                ?>
+                <li><a href="index.php?action=formlogin">Connexion</a></li>
                 <li><a href="index.php?action=formregister">S'inscrire</a></li>
+                <?php } ?>
                 <li><a href="index.php?controller=produit&action=allproduit">Produit</a></li>
                 <li><a href="#">Contact</a></li>
                 <li><a href="#">Map</a></li>

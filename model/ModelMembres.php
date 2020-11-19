@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once File::buildpath(array("model","Model.php"));
 class ModelMembres extends Model {
     protected static $object = "membres";
@@ -8,19 +8,20 @@ class ModelMembres extends Model {
     private $pseudoMembre;
     private $mailMembre;
     private $mdpMembre;
-    private $panierMembre;
     private $confirmCompte;
     private $confirmKey;
+    private $estadmin;
 
 
-    public function __construct($pseudoMembre = NULL, $mailMembre = NULL, $mdpMembre = NULL , $confirmCompte = NULL ,$confirmKey = NULL){
-        if ( !isnull($pseudoMembre) && !is_null($mailMembre) && !is_null($mdpMembre) && !is_null($confirmCompte) && !is_null($confirmKey)){
+    public function __construct($pseudoMembre = NULL, $mailMembre = NULL, $mdpMembre = NULL,$confirmKey = NULL){
+        if ( !isnull($pseudoMembre) && !is_null($mailMembre) && !is_null($mdpMembre) && !is_null($confirmKey)){
             $this->numMembre = null;
             $this->pseudoMembre = $pseudoMembre;
             $this->mail = $mailMembre;
             $this->mdp = $mdpMembre;
-            $this->panierMembre = array();
-            $this->$confirmCompte = $confirmCompte;
+            
+            $this->$confirmCompte = 0;
+            $this->$estadmin = 0;
             $this->$confirmKey = $confirmKey;
        }
     }
@@ -30,14 +31,15 @@ class ModelMembres extends Model {
         return false;
     }
 
+    
     public function save() {
         try {
-            $sql = "INSERT INTO MEMBRES ( pseudoMembre, mailMembre, mdpMembre, confirmCompte,confirmKey) VALUES (?,?,?,?,?)";
+            $sql = "INSERT INTO MEMBRES ( pseudoMembre, mailMembre, mdpMembre, confirmCompte,confirmKey, estadmin) VALUES (?,?,?,?,?,?)";
             
             // Préparation de la requête
             $req_prep = Model::$pdo->prepare($sql);
 
-            $values = array( $this->pseudoMembre, $this->mail, $this->mdp, 0 , $this->confirmKey);
+            $values = array( $this->pseudoMembre, $this->mail, $this->mdp, 0 , $this->confirmKey, 0);
             // On donne les valeurs et on exécute la requête	 
             $req_prep->execute($values);
             
@@ -75,11 +77,8 @@ class ModelMembres extends Model {
                 if($user == $mailconnect){
                     //creation de session et redirection
                     $userinfo = $requser->fetch();
-                    $_SESSION['numMembre'] = $userinfo['numMembre'];
-                    $_SESSION['pseudoMembre'] = $userinfo['pseudoMembre'];
-                    $_SESSION['mailMembre'] = $userinfo['mailMembre'];
-                    $membre = new ModelMembres($_SESSION['pseudoMembre'],$_SESSION['mailMembre'],$mdpconnect);
-                    $membre->setnumMembre($_SESSION['numMembre']);
+                    $membre = new ModelMembres($userinfo['pseudoMembre'],$mailconnect,$mdpconnect,$userinfo['confirmKey']);
+                    $membre->setnumMembre($userinfo['numMembre']);
                     return true;
                     
                 }
@@ -90,8 +89,11 @@ class ModelMembres extends Model {
             else{
                 return "Tous les champs doivent être complété !";
             }
+
     
     }
+
+    
 
     public static function getwithmail($mailconnect,$valeur){
         $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
@@ -127,6 +129,16 @@ class ModelMembres extends Model {
     public static function commandeAll($numMembre){
         $req = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE numMembre= ?");
         $req->execute(array($numMembre));
+    }
+
+    public static function updateMembre($categorie,$valeur){
+        $req = Model::$pdo->prepare("UPDATE MEMBRES SET $categorie = ? WHERE numMembre = ?");
+        $req->execute(array($valeur,$_SESSION['numMembre']));
+    }
+
+    public static function supprimerMembre(){
+        $req = Model::$pdo->prepare("DELETE FROM MEMBRES WHERE numMembre = ?");
+        $req->execute(array($_SESSION['numMembre']));
     }
 }
 
