@@ -78,7 +78,7 @@ class Model {
         }
     } 
 
-    public static function delete($primary) {
+    public static function delete($deletevalue) {
         try {
             $table_name = static::$object;
             $primary_key = static::$primary;
@@ -87,7 +87,7 @@ class Model {
             $req_prep = Model::$pdo->prepare($sql);
 
             $values = array(
-                "primary" => $primary
+                "primary" => $deletevalue
             );
             // On donne les valeurs et on exécute la requête	 
             return $req_prep->execute($values);

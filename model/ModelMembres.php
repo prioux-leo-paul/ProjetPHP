@@ -13,16 +13,12 @@ class ModelMembres extends Model {
     private $estadmin;
 
 
-    public function __construct($pseudoMembre = NULL, $mailMembre = NULL, $mdpMembre = NULL,$confirmKey = NULL){
-        if ( !isnull($pseudoMembre) && !is_null($mailMembre) && !is_null($mdpMembre) && !is_null($confirmKey)){
-            $this->numMembre = null;
-            $this->pseudoMembre = $pseudoMembre;
-            $this->mail = $mailMembre;
-            $this->mdp = $mdpMembre;
-            
-            $this->$confirmCompte = 0;
-            $this->$estadmin = 0;
-            $this->$confirmKey = $confirmKey;
+    public function __construct($pseudo = NULL, $mail = NULL, $mdp = NULL,$Key = NULL){
+        if ( !is_null($pseudo) && !is_null($mail) && !is_null($mdp) && !is_null($Key)){
+            $this->pseudoMembre = $pseudo;
+            $this->mailMembre = $mail;
+            $this->mdpMembre = $mdp;
+            $this->confirmKey = $Key;
        }
     }
     public function get($nom_attribut) {
@@ -39,7 +35,7 @@ class ModelMembres extends Model {
             // Préparation de la requête
             $req_prep = Model::$pdo->prepare($sql);
 
-            $values = array( $this->pseudoMembre, $this->mail, $this->mdp, 0 , $this->confirmKey, 0);
+            $values = array( $this->pseudoMembre, $this->mailMembre, $this->mdpMembre, 0 , $this->confirmKey, 0);
             // On donne les valeurs et on exécute la requête	 
             $req_prep->execute($values);
             

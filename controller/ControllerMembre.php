@@ -191,7 +191,7 @@ class ControllerMembre {
  
         if ( confirm( "Etes vous sûr de vouloir supprimer votre compte" ) ) {
             <?php*/
-        ModelMembres::supprimerMembre();
+        ModelMembres::delete($_SESSION['numMembre']);
         header("Location: index.php?action=Home");
         /*?>
         } else {

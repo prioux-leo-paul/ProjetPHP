@@ -30,6 +30,7 @@ require_once File::buildpath(array("model","ModelMembres.php")); // chargement d
                 <li><a href="index.php?action=formregister">S'inscrire</a></li>
                 <?php } ?>
                 <li><a href="index.php?controller=produit&action=allproduit">Produit</a></li>
+                <li><a href="index.php?controller=produit&action=voirpanier">Panier</a></li>
                 <li><a href="#">Contact</a></li>
                 <li><a href="#">Map</a></li>
             </ul> 
