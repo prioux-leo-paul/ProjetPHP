@@ -158,20 +158,24 @@ class ControllerMembre {
 
     public static function editerprofile(){
         ControllerMembre::formediterprofile();
-        $newpseudo = $_GET['newpseudo'];
-        $newmail = $_GET['newmail'];
-        $newmdp1 = $_GET['newmdp1'];
-        $newmdp2 = $_GET['newmdp2'];
+        $newpseudo = $_POST['newpseudo'];
+        $newmail = $_POST['newmail'];
+        $newmdp1 = $_POST['newmdp1'];
+        $newmdp2 = $_POST['newmdp2'];
+        
         
         if(isset($_SESSION['numMembre'])){
             if(isset($newpseudo) && $newpseudo != $_SESSION['pseudoMembre']){
-                ModelMembres::updateMembre("pseudoMembre",$newpseudo);
+                $array_pseudo=array("numMembre" => $_SESSION["numMembre"],"pseudoMembre" => $newpseudo,);
+                ModelMembres::update($array_pseudo);
             }
-            if(isset($newmail) && $newmail != $_SESSION['mailMembre']){
-                ModelMembres::updateMembre("mailMembre",$newmail);
+            if(isset($newmail) && $newmail != $_SESSION['mailMembre'] && !ModelMembres::userexist($newmail)){
+                $array_mail=array("numMembre" => $_SESSION["numMembre"],"mailMembre" => $newmail,);
+                ModelMembres::update($array_mail);
             }
             if(isset($newmdp2) && isset($newmdp1) && $newmdp1 == $newmdp2){
-                ModelMembres::updateMembre("mdpMembre",$newmdp1);
+                $array_mdp=array("numMembre" => $_SESSION["numMembre"],"mdpMembre" => $newmdp1,);
+                ModelMembres::update($array_mdp);
             }
             header("Location: index.php?action=profile");
         }
@@ -187,7 +191,7 @@ class ControllerMembre {
         if ( confirm( "Etes vous sûr de vouloir supprimer votre compte" ) ) {
             <?php*/
         ModelMembres::delete($_SESSION['numMembre']);
-        header("Location: index.php?action=Home");
+        ControllerMembre::logout();
         /*?>
         } else {
             <?php
