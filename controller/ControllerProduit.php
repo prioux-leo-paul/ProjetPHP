@@ -3,19 +3,17 @@
 require_once File::buildpath(array("model","ModelProduits.php"));
 
 class ControllerProduit {
-    
+    protected static $object = "produits";
     
     public static function read(){
         $prod =$_GET['numpro'];
         $product = ModelProduits::selectPrimary($prod);
         if($product){
-            $controller = "produit";
             $view = "Test";
             $pagetile = "Page de test";
             require(File::buildpath(array("view","view.php")));
         }
         else{
-            $controller = "membre";
             $view = "Error";
             $pagetile = "Page d'erreur";
             require(File::buildpath(array("view","view.php")));
@@ -23,7 +21,6 @@ class ControllerProduit {
     }
 
     public static function allproduit(){
-        $controller = "produits";
         $view = "filtre";
         $pagetile = "Produits";
         require (File::buildpath(array("view","view.php")));
@@ -47,7 +44,6 @@ class ControllerProduit {
     }
 
     public static function voirpanier(){
-        $controller = "produits";
         $view = "panier";
         $pagetile = "Panier";
         require (File::buildpath(array("view","view.php")));

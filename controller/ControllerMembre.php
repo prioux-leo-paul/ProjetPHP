@@ -4,8 +4,8 @@ require_once File::buildpath(array("model","ModelMembres.php")); // chargement d
 
 
 class ControllerMembre {
+    protected static $object= "membres";
     public static function Error() {
-        $controller = "membres";
         $view = "error";
         $pagetitle = "Erreur";
         require File::buildpath(array("view","view.php"));
@@ -13,7 +13,6 @@ class ControllerMembre {
     }
 
     public static function Home() {
-        $controller = "membres";
         $view = "Home";
         $pagetitle = "Page d'acceuil";
         require File::buildpath(array("view","view.php"));
@@ -21,7 +20,6 @@ class ControllerMembre {
     }
 
     public static function formregister() {
-        $controller = "membres";
         $view = "register";
         $pagetitle = "S'enregistrer";
         require File::buildpath(array("view","view.php"));
@@ -89,7 +87,6 @@ class ControllerMembre {
 
     public static function formlogin() {
         $pagetitle = "Se connecter";
-        $controller = "membres";
         $view = "login";
         require File::buildpath(array("view","view.php"));
     }
@@ -148,7 +145,6 @@ class ControllerMembre {
 
     public static function profile(){
         $pagetitle = "Profil";
-        $controller = "membres";
         $view = "Profile";
         require File::buildpath(array("view","view.php"));
         
@@ -156,7 +152,6 @@ class ControllerMembre {
 
     public static function formediterprofile(){
         $pagetitle = "Editer Profil";
-        $controller = "membres";
         $view = "editerprofile";
         require File::buildpath(array("view","view.php"));
     }
