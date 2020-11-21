@@ -42,7 +42,7 @@ require_once File::buildpath(array("model","ModelMembres.php")); // chargement d
         </div>
         <div class="main_content" align="center">
             <?php
-                $filepath = File::buildpath(array("view", $controller, "$view.php"));
+                $filepath = File::buildpath(array("view", static::$object, "$view.php"));
                 require $filepath;
                 
             ?>
