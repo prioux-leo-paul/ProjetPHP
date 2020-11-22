@@ -78,6 +78,37 @@ class Model {
         }
     } 
 
+    public static function selectAllPrimary($primary_value){
+        try {
+            $pdo = self::$pdo;
+            $table_name = static::$object;
+            $class_name = "Model".ucfirst($table_name);
+            $primary_key = static::$primary;
+            $sql = "SELECT * from ".$table_name." WHERE ".$primary_key."=:nom_tag";
+            // Préparation de la requête
+            $req_prep = Model::$pdo->prepare($sql);
+            $values = array(
+                "nom_tag" => $primary_value,
+            );
+            // On donne les valeurs et on exécute la requête        
+            $req_prep->execute($values);
+            // On récupère les résultats comme précédemment
+            $req_prep->setFetchMode(PDO::FETCH_CLASS, $class_name);
+            $tab_object = $req_prep->fetchAll();
+            // si il n'y a pas de résultats, on renvoie false
+            if (empty($tab_object))
+                return false;
+            return $tab_object;
+        } catch (PDOException $e) {
+            if (Conf::getDebug()) {
+                echo $e->getMessage(); // affiche un message d'erreur
+            } else {
+                echo 'Une erreur est survenue <a href=""> retour a la page d\'accueil </a>';
+            }
+            die();
+        }
+    }
+    
     public static function delete($deletevalue) {
         try {
             $table_name = static::$object;

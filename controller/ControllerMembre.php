@@ -80,7 +80,7 @@ class ControllerMembre {
                 echo "Votre pseudo doit contenir moins de 255 charactère !";
             }
         } else{ 
-            echo "Tous les champs doivent etre complété !";
+            echo '<p>Tous les champs doivent etre complété !</p>';
 
         }
     }
@@ -98,21 +98,22 @@ class ControllerMembre {
         $mailconnect = $_POST['mailconnect'];
         $mdpconnect = $_POST['mdpconnect'];
         
-        $test = ModelMembres::verifMembre( $mailconnect, $mdpconnect);
-
-        if ($test == true){
-            if(ModelMembres::getwithmail($mailconnect,"confirmCompte") == 1){
-                $_SESSION['pseudoMembre'] = ModelMembres::getwithmail($mailconnect, "pseudoMembre");
+        $membre = ModelMembres::verifMembre( $mailconnect, $mdpconnect);
+        
+        if (!is_string($membre)){
+            if($membre->get("confirmCompte") == 1){
+                $_SESSION['pseudoMembre'] = $membre->get("pseudoMembre");
                 $_SESSION['mailMembre'] = $mailconnect;
-                $_SESSION['numMembre'] = ModelMembres::getwithmail($mailconnect, "numMembre");
+                $_SESSION['numMembre'] = $membre->get("numMembre");
                 header("Location: index.php?action=profile");
+                
             }
             else{
-                echo "Votre compte n'es toujours pas confirmer";
+                echo "<p>Votre compte n'es toujours pas confirmer</p>";
             }
         }
         else{
-            echo $test;
+            echo $membre;
         }
         
         
@@ -126,12 +127,12 @@ class ControllerMembre {
                 if( ModelMembres::getwithmail($mail,'confirmCompte') == 0){
                     if(ModelMembres::getwithmail($mail,'confirmKey') == $key)
                         ModelMembres::compteconfirmer($mail,$key);
-                    echo "Votre compte a bien été confirmé !";
+                    echo "<p>Votre compte a bien été confirmé !</p>";
                 }else{
-                    echo "Votre compte a déja été confirmé !";
+                    echo "<p>Votre compte a déja été confirmé !</p>";
                 }
             }else{
-                    echo "l'utilisateur n'existe pas !";
+                    echo "<p>l'utilisateur n'existe pas !</p>";
                 }
     }
     

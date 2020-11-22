@@ -7,8 +7,7 @@ class ModelProduits extends Model {
     private $nomProduit;
     private $numCategorie;
     private $prix;
-    private $stock;
-    private $tailleProduit;
+    private $taille;
     private $descriptionProduit;
 
     public function __construct($numProduit = NULL,$nomProduit=NULL, $numCategorie=NULL,$prix=NULL,$stock=NULL,$tailleProduit=NULL,$descriptionProduit=NULL){
@@ -17,10 +16,12 @@ class ModelProduits extends Model {
             $this->nomProduit=$nomProduit;
             $this->numCategorie=$numCategorie;
             $this->prix=$prix;
-            $this->stock=$stock;
-            $this->tailleProduit=$tailleProduit;
             $this->descriptionProduit=$descriptionProduit;
         }
+    }
+    public function set($nom_attribut,$valeur) {
+        if(property_exists($this,$nom_attribut))
+            $this->$nom_attribut = $valeur;
     }
     public function get($nom_attribut) {
         if (property_exists($this, $nom_attribut))

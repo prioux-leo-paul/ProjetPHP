@@ -1,6 +1,7 @@
 <?php
 
 require_once File::buildpath(array("model","ModelProduits.php"));
+require_once File::buildpath(array("model","ModelCategories.php"));
 
 class ControllerProduit {
     protected static $object = "produits";
@@ -34,13 +35,24 @@ class ControllerProduit {
         
     }
 
-    public static function ajouterpanier(){
+    public static function showproduct($param){
+        $current_product = ModelProduits::selectPrimary($param);
+        $current_numcategory = $current_product->get("numCategorie");
+        $current_category = ModelCategories::selectPrimary($current_numcategory);
+        $view = "produitgenerique";
+        $pagetile = $current_product->get("nomProduit");
+        require (File::buildpath(array("view","view.php")));
+    }
+
+    public static function ajouterpanier($produit,$taille){
+        $produit->set("taille",$taille);
+
         if(empty($_SESSION['panier']))
-            $_SESSION['panier']=array(1);
+            $_SESSION['panier']=array($produit);
         else
-            array_push($_SESSION['panier'],1);
+            array_push($_SESSION['panier'],$produit);
         
-        header("Location: index.php?controller=produit&action=voirpanier");
+        
     }
 
     public static function voirpanier(){

@@ -27,6 +27,10 @@ class ModelMembres extends Model {
         return false;
     }
 
+    public function set($nom_attribut,$valeur) {
+        $this->$nom_attribut = $valeur; 
+    }
+
     
     public function save() {
         try {
@@ -59,23 +63,23 @@ class ModelMembres extends Model {
     public static function verifMembre( $mailconnect, $mdpconnect){
 
             $mailconnect =htmlspecialchars($mailconnect);
-            $mdpconnect=sha1($mailconnect);
+            $mdpconnect=sha1($mdpconnect);
+            
             //verifie si le mdp et le mail sont bon
             if (!empty($mdpconnect) AND !empty($mailconnect)) {
-
-                $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
-                $requser->execute(array($mailconnect));
-                $requser2 = Model::$pdo->prepare("SELECT mailMembre FROM MEMBRES WHERE mdpMembre= ?");
-                $requser2->execute(array($mdpconnect));
-                $user = $requser2->fetch();
+                if(!ModelMembres::userexist($mailconnect))
+                    return "l'utilisateur n'existe pas !";
                 
-                
-                if($user == $mailconnect){
+                $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre = ? AND mdpMembre = ?");
+                $requser->execute(array($mailconnect,$mdpconnect));
+                $exist = $requser->rowCount();
+                if($exist == 1){
                     //creation de session et redirection
                     $userinfo = $requser->fetch();
                     $membre = new ModelMembres($userinfo['pseudoMembre'],$mailconnect,$mdpconnect,$userinfo['confirmKey']);
-                    $membre->setnumMembre($userinfo['numMembre']);
-                    return true;
+                    $membre->set("numMembre",$userinfo['numMembre']);
+                    $membre->set("confirmCompte",$userinfo['confirmCompte']);
+                    return $membre;
                     
                 }
                 else{
@@ -95,6 +99,8 @@ class ModelMembres extends Model {
         $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
         $requser->execute(array($mailconnect));
         $user = $requser->fetch();
+        if(empty($user))
+            return 2;
         return $user[$valeur];
     }
 

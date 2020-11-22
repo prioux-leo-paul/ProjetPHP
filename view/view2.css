@@ -17,6 +17,7 @@
     height: 100%;
     position: fixed;
 }
+
 .container .box .first-box ul li{
     padding: 15px;
     border-bottom: 1px solid #bdb8d7;
@@ -69,8 +70,12 @@
 .container .box .first-box .social_media a:hover{
       background-color: #594f8d;
 }
+.container .box .first-box .social_media a:hover i{
+    color: white;
+}
 .container .full-page{
     margin-left: 200px;
+    width: 100%;
 }
 
 
