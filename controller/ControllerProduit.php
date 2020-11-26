@@ -26,12 +26,16 @@ class ControllerProduit {
         $pagetile = "Produits";
         require (File::buildpath(array("view","view.php")));
         $tab = ModelProduits::selectAll();
+        echo "<div class =\"divProduit\">";
         foreach($tab as $u){
-                echo  "Produit : ".$u->get("nomProduit")."\n";
-                echo  "Prix : ".$u->get("prix")."\n";
-                echo "Taille : ".$u->get("tailleProduit")."\n";
-                echo  "Description : ".$u->get("descriptionProduit")."\n \n";
+                echo "<div class =\"containerProduit\">";
+                echo "<img src=\"" . $u->get("imgPath"). "\">";
+                echo "<div class=\"nomProduit\">" . $u->get("nomProduit") . "</div>";
+                echo "<div class=\"descriptionProduit\">" . $u->get("descriptionProduit") . "</div>";
+                echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</div>";
+                echo "</div>";
         }
+        echo "</div>";
         
     }
 
@@ -76,8 +80,32 @@ class ControllerProduit {
 
         //header("Location: index.php?controller=produit&action=voirpanier");
     }
-}
 
+    public static function selectedproduit(){
+        $view = "filtre";
+        $pagetile = "Produits";
+        require (File::buildpath(array("view","view.php")));
+        $tab = ModelProduits::selectAll();
+        $prixComp = 5000;
+
+        if ($_POST['prix'] > 1 && $_POST['prix'] < 101) {
+            $prixComp = $_POST['prix'];
+        }
+
+        echo "<div class =\"divProduit\">";
+        foreach($tab as $u){ 
+            if ((int)$u->get("numCategorie") == (int)$_POST['categorie'] && $u->get("prix") <= $prixComp) {
+                echo "<div class =\"containerProduit\">";
+                echo "<img src=\"" . $u->get("imgPath"). "\">";
+                echo "<div class=\"nomProduit\">" . $u->get("nomProduit") . "</div>";
+                echo "<div class=\"descriptionProduit\">" . $u->get("descriptionProduit") . "</div>";
+                echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</div>";
+                echo "</div>";
+            }
+        }
+        echo "</div>";
+    }
+}
 
 
 
