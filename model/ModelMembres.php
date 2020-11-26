@@ -34,7 +34,7 @@ class ModelMembres extends Model {
     
     public function save() {
         try {
-            $sql = "INSERT INTO MEMBRES ( pseudoMembre, mailMembre, mdpMembre, confirmCompte,confirmKey, estadmin) VALUES (?,?,?,?,?,?)";
+            $sql = "INSERT INTO membres ( pseudoMembre, mailMembre, mdpMembre, confirmCompte,confirmKey, estadmin) VALUES (?,?,?,?,?,?)";
             
             // Préparation de la requête
             $req_prep = Model::$pdo->prepare($sql);
@@ -70,7 +70,7 @@ class ModelMembres extends Model {
                 if(!ModelMembres::userexist($mailconnect))
                     return "l'utilisateur n'existe pas !";
                 
-                $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre = ? AND mdpMembre = ?");
+                $requser = Model::$pdo->prepare("SELECT * FROM membres WHERE mailMembre = ? AND mdpMembre = ?");
                 $requser->execute(array($mailconnect,$mdpconnect));
                 $exist = $requser->rowCount();
                 if($exist == 1){
@@ -96,7 +96,7 @@ class ModelMembres extends Model {
     
 
     public static function getwithmail($mailconnect,$valeur){
-        $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
+        $requser = Model::$pdo->prepare("SELECT * FROM membres WHERE mailMembre= ?");
         $requser->execute(array($mailconnect));
         $user = $requser->fetch();
         if(empty($user))
@@ -107,7 +107,7 @@ class ModelMembres extends Model {
     
 
     public static function compteconfirmer($mail,$Key){
-        $updateuser = Model::$pdo->prepare("UPDATE MEMBRES SET confirmCompte = 1 WHERE mailMembre = ? AND confirmKey = ?");
+        $updateuser = Model::$pdo->prepare("UPDATE membres SET confirmCompte = 1 WHERE mailMembre = ? AND confirmKey = ?");
         $updateuser->execute(array($mail,$Key));
     }
 
@@ -117,7 +117,7 @@ class ModelMembres extends Model {
 
 
     public static function userexist($mail){
-        $reqmail = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
+        $reqmail = Model::$pdo->prepare("SELECT * FROM membres WHERE mailMembre= ?");
         $reqmail->execute(array($mail));
         $mailexist = $reqmail->rowCount();
         if ($mailexist == 0){
@@ -129,17 +129,17 @@ class ModelMembres extends Model {
     }
 
     public static function commandeAll($numMembre){
-        $req = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE numMembre= ?");
+        $req = Model::$pdo->prepare("SELECT * FROM membres WHERE numMembre= ?");
         $req->execute(array($numMembre));
     }
 
     public static function updateMembre($categorie,$valeur){
-        $req = Model::$pdo->prepare("UPDATE MEMBRES SET $categorie = ? WHERE numMembre = ?");
+        $req = Model::$pdo->prepare("UPDATE membres SET $categorie = ? WHERE numMembre = ?");
         $req->execute(array($valeur,$_SESSION['numMembre']));
     }
 
     public static function supprimerMembre(){
-        $req = Model::$pdo->prepare("DELETE FROM MEMBRES WHERE numMembre = ?");
+        $req = Model::$pdo->prepare("DELETE FROM membres WHERE numMembre = ?");
         $req->execute(array($_SESSION['numMembre']));
     }
 }

@@ -28,11 +28,11 @@ class ControllerProduit {
         $tab = ModelProduits::selectAll();
         echo "<div class =\"divProduit\">";
         foreach($tab as $u){
-                echo "<div class =\"containerProduit\">";
+                echo "<div class =\"containerProduit\"><a href=\"index.php?controller=produit&action=showproduct&param=".$u->get("numProduit")."\">";
                 echo "<img src=\"" . $u->get("imgPath"). "\">";
                 echo "<div class=\"nomProduit\">" . $u->get("nomProduit") . "</div>";
                 echo "<div class=\"descriptionProduit\">" . $u->get("descriptionProduit") . "</div>";
-                echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</div>";
+                echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</a></div>";
                 echo "</div>";
         }
         echo "</div>";
@@ -41,24 +41,69 @@ class ControllerProduit {
 
     
 
-    public static function voirpanier(){
-        $view = "panier";
-        $pagetile = "Panier";
-        require (File::buildpath(array("view","view.php")));
-        if(!empty($_SESSION['panier'])){
-            $array = $_SESSION['panier'];
-            //$tab = ModelProduits::selectAll();
-                for($i = 0; $i < count($array); $i++){
-                    
-                        echo  "Produit : ".$array[$i]->get("nomProduit")."\n";
-                        echo  "Prix : ".$array[$i]->get("prix")."\n";
-                        echo "Taille : ".$array[$i]->get("taille")."\n \n";
-                    
-                }
+    public static function ajouterpanier($produit,$taille,$qte){
+        $produit->set("taille",$taille);
+
+        if(!isset($_SESSION['panier'])){
+            $_SESSION['panier']=array();
+            $_SESSION['panier']['numProduit'] = array($produit->get("numProduit"));
+            $_SESSION['panier']['tailleProduit'] = array($produit->get("taille"));
+            $_SESSION['panier']['libelleProduit'] = array($produit->get("nomProduit"));
+            $_SESSION['panier']['qteProduit'] = array($qte);
+            $_SESSION['panier']['prixProduit'] = array($produit->get("prix"));
+
             
         }
-        else 
-            echo "Votre panier est vide";
+        else{
+            $positionProduit = array_search($produit->get("numProduit"),  $_SESSION['panier']['numProduit']);
+
+                if ($positionProduit !== false)
+            {
+                $_SESSION['panier']['qteProduit'][$positionProduit] += $qte ;
+            }
+            else{
+            array_push( $_SESSION['panier']['libelleProduit'],$produit->get("nomProduit"));
+            array_push( $_SESSION['panier']['qteProduit'],$qte);
+            array_push( $_SESSION['panier']['prixProduit'],$produit->get("prix"));
+            array_push( $_SESSION['panier']['numProduit'],$produit->get("numProduit"));
+            array_push( $_SESSION['panier']['tailleProduit'],$produit->get("taille"));
+            }
+        }
+
+        echo "<p> votre produit a été mis dans votre panier ! </p>";
+
+    }
+
+    public static function supprimerArticle($nump){
+        //Si le panier existe
+        
+           //Nous allons passer par un panier temporaire
+           $tmp=array();
+           $tmp['libelleProduit'] = array();
+           $tmp['qteProduit'] = array();
+           $tmp['prixProduit'] = array();
+           $tmp['numProduit'] = array();
+           $tmp['tailleProduit'] = array();
+           
+     
+           for($i = 0; $i < count($_SESSION['panier']['numProduit']); $i++)
+           {
+              if ($_SESSION['panier']['numProduit'][$i] !== $nump)
+              {
+                 array_push( $tmp['libelleProduit'],$_SESSION['panier']['libelleProduit'][$i]);
+                 array_push( $tmp['qteProduit'],$_SESSION['panier']['qteProduit'][$i]);
+                 array_push( $tmp['prixProduit'],$_SESSION['panier']['prixProduit'][$i]);
+                 array_push( $tmp['numProduit'],$_SESSION['panier']['numProduit'][$i]);
+                 array_push( $tmp['tailleProduit'],$_SESSION['panier']['tailleProduit'][$i]);
+              }
+     
+           }
+           //On remplace le panier en session par notre panier temporaire à jour
+           $_SESSION['panier'] =  $tmp;
+           //On efface notre panier temporaire
+           unset($tmp);
+           header("Location: index.php?controller=produit&action=voirpanier");
+        
     }
 
     public static function showproduct($param){
@@ -66,24 +111,62 @@ class ControllerProduit {
         $current_numcategory = $current_product->get("numCategorie");
         $current_category = ModelCategories::selectPrimary($current_numcategory);
         $view = "produitgenerique";
+        $nump = $param;
         $pagetile = $current_product->get("nomProduit");
         require (File::buildpath(array("view","view.php")));
     }
 
-    public static function ajouterpanier($produit,$taille){
-        $produit->set("taille",$taille);
-
-        if(empty($_SESSION['panier']))
-            $_SESSION['panier']=array(0 =>$produit,);
-        else
-            array_push($_SESSION['panier'],$produit);
-
-        //header("Location: index.php?controller=produit&action=voirpanier");
+    public static function voirpanier(){
+        $view = "panier";
+        $pagetitle = "Panier";
+        require (File::buildpath(array("view","view.php")));
+        
     }
+
+    public static function modifierQTeArticle($taillep,$nump,$qteProduit){
+        //Si le panier existe
+        if (isset($_SESSION['panier']))
+        {
+            $liststock = ModelTailles::selectAllPrimary($nump);
+            foreach($liststock as $taille){
+                if($taille->get("taille") == $taillep)
+                    $stock = $taille->get("stock");
+            }
+           //Si la quantité est positive on modifie sinon on supprime l'article
+           if ($qteProduit > 0)
+           {
+               if($qteProduit < $stock){
+                    //Recharche du produit dans le panier
+                    $positionProduit = array_search($nump,  $_SESSION['panier']['numProduit']);
+            
+                    if ($positionProduit !== false)
+                    {
+                        $_SESSION['panier']['qteProduit'][$positionProduit] = $qteProduit ;
+                    }
+                }
+           }
+           else
+           supprimerArticle($libelleProduit);
+        }
+        else
+        echo "<p> Un problème est survenu rééssayez. </p>";
+     }
+
+    public static function MontantGlobal(){
+        $total=0;
+        if(isset($_SESSION['panier'])){
+            for($i = 0; $i < count($_SESSION['panier']['libelleProduit']); $i++)
+            {
+            $total += $_SESSION['panier']['qteProduit'][$i] * $_SESSION['panier']['prixProduit'][$i];
+            }
+        }
+        return $total;
+     }
+        
 
     public static function selectedproduit(){
         $view = "filtre";
-        $pagetile = "Produits";
+        $pagetitle = "Produits";
         require (File::buildpath(array("view","view.php")));
         $tab = ModelProduits::selectAll();
         $prixComp = 5000;

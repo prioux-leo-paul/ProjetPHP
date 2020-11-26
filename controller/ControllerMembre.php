@@ -205,6 +205,12 @@ class ControllerMembre {
     
     }
 
+    public static function contact(){
+        $pagetitle = "Contact";
+        $view = "contact";
+        require File::buildpath(array("view","view.php"));
+    }
+
     
 }
 ?>

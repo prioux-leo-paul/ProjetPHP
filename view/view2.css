@@ -9,7 +9,9 @@
 .container{
     display: flex;
 }
-
+input[type="number"] {
+    width:30px;
+ }
 .divProduit{
     margin-left: 20%;
     margin-top: 5%;

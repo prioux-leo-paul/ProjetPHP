@@ -2,13 +2,14 @@
 require_once File::buildpath(array("model","Model.php"));
 class ModelProduits extends Model {
     protected static $primary = "numProduit";
-    protected static $object = "PRODUITS";
+    protected static $object = "produits";
     private $numProduit;
     private $nomProduit;
     private $numCategorie;
     private $prix;
     private $taille;
     private $descriptionProduit;
+    private $img;
 
     public function __construct($numProduit = NULL,$nomProduit=NULL, $numCategorie=NULL,$prix=NULL,$stock=NULL,$tailleProduit=NULL,$descriptionProduit=NULL){
         if (!is_null($numProduit) && !is_null($nomProduit) && !is_null($numCategorie) && !is_null($prix) && !is_null($stock) && !is_null($tailleProduit) && !is_null($descriptionProduit)){
@@ -27,6 +28,13 @@ class ModelProduits extends Model {
         if (property_exists($this, $nom_attribut))
             return $this->$nom_attribut;
         return false;
+    }
+    public static function majimg($nump){
+        
+        $reqimg = Model::$pdo->prepare("SELECT imgPath FROM produits WHERE numProduit = ?");
+        $reqimg->execute(array($nump));
+        $img = $reqimg->fetch();
+        return $img['imgPath'];
     }
     
 }

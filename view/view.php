@@ -34,7 +34,7 @@ require_once File::buildpath(array("model","ModelMembres.php")); // chargement d
                         <?php } ?>
                         <li><a href="index.php?controller=produit&action=allproduit">Produit</a></li>
                         <li><a href="index.php?controller=produit&action=voirpanier">Panier</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="index.php?action=contact">Contact</a></li>
                     </ul>
                     <div class="social_media">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>

@@ -1,7 +1,7 @@
 <?php
 require_once File::buildpath(array("model","Model.php"));
 class ModelCategories extends Model {
-    protected static $object = "Categories";
+    protected static $object = "categories";
     protected static $primary = "numCategorie";
     private $numCategorie;
     private $nomCategorie;
