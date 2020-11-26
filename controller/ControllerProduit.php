@@ -2,7 +2,7 @@
 
 require_once File::buildpath(array("model","ModelProduits.php"));
 require_once File::buildpath(array("model","ModelCategories.php"));
-
+require_once File::buildpath(array("model","ModelTailles.php"));
 class ControllerProduit {
     protected static $object = "produits";
     
@@ -35,6 +35,28 @@ class ControllerProduit {
         
     }
 
+    
+
+    public static function voirpanier(){
+        $view = "panier";
+        $pagetile = "Panier";
+        require (File::buildpath(array("view","view.php")));
+        if(!empty($_SESSION['panier'])){
+            $array = $_SESSION['panier'];
+            //$tab = ModelProduits::selectAll();
+                for($i = 0; $i < count($array); $i++){
+                    
+                        echo  "Produit : ".$array[$i]->get("nomProduit")."\n";
+                        echo  "Prix : ".$array[$i]->get("prix")."\n";
+                        echo "Taille : ".$array[$i]->get("taille")."\n \n";
+                    
+                }
+            
+        }
+        else 
+            echo "Votre panier est vide";
+    }
+
     public static function showproduct($param){
         $current_product = ModelProduits::selectPrimary($param);
         $current_numcategory = $current_product->get("numCategorie");
@@ -48,33 +70,11 @@ class ControllerProduit {
         $produit->set("taille",$taille);
 
         if(empty($_SESSION['panier']))
-            $_SESSION['panier']=array($produit);
+            $_SESSION['panier']=array(0 =>$produit,);
         else
             array_push($_SESSION['panier'],$produit);
-        
-        
-    }
 
-    public static function voirpanier(){
-        $view = "panier";
-        $pagetile = "Panier";
-        require (File::buildpath(array("view","view.php")));
-        if(!empty($_SESSION['panier'])){
-            $array = $_SESSION['panier'];
-            $tab = ModelProduits::selectAll();
-            foreach($tab as $u){
-                foreach($array as $i){
-                    if($u->get("numProduit") == $i){
-                        echo  "Produit : ".$u->get("nomProduit")."\n";
-                        echo  "Prix : ".$u->get("prix")."\n";
-                        echo "Taille : ".$u->get("tailleProduit")."\n";
-                        echo  "Description : ".$u->get("descriptionProduit")."\n \n";
-                    }
-                }
-            }
-        }
-        else 
-            echo "Votre panier est vide";
+        //header("Location: index.php?controller=produit&action=voirpanier");
     }
 }
 

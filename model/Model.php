@@ -107,8 +107,8 @@ class Model {
             }
             die();
         }
-    }
-    
+    } 
+
     public static function delete($deletevalue) {
         try {
             $table_name = static::$object;
