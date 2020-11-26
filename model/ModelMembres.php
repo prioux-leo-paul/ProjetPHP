@@ -1,30 +1,45 @@
 <?php
-session_start();
-require_once File::buildpath(array("model","Model.php"));
-class ModelMembres {
 
+require_once File::buildpath(array("model","Model.php"));
+class ModelMembres extends Model {
+    protected static $object = "membres";
+    protected static $primary = "numMembre";
     private $numMembre;
     private $pseudoMembre;
     private $mailMembre;
     private $mdpMembre;
-    private $panierMembre;
+    private $confirmCompte;
+    private $confirmKey;
+    private $estadmin;
 
-    public function __construct($pseudoMembre, $mailMembre, $mdpMembre){
-        $this->numMembre = null;
-        $this->pseudoMembre = $pseudoMembre;
-        $this->mail = $mailMembre;
-        $this->mdp = $mdpMembre;
-        $this->panierMembre = array();
+
+    public function __construct($pseudo = NULL, $mail = NULL, $mdp = NULL,$Key = NULL){
+        if ( !is_null($pseudo) && !is_null($mail) && !is_null($mdp) && !is_null($Key)){
+            $this->pseudoMembre = $pseudo;
+            $this->mailMembre = $mail;
+            $this->mdpMembre = $mdp;
+            $this->confirmKey = $Key;
+       }
+    }
+    public function get($nom_attribut) {
+        if (property_exists($this, $nom_attribut))
+            return $this->$nom_attribut;
+        return false;
     }
 
+    public function set($nom_attribut,$valeur) {
+        $this->$nom_attribut = $valeur; 
+    }
+
+    
     public function save() {
         try {
-            $sql = "INSERT INTO PRODUITS ( pseudoMembre, mailMembre, mdpMembre) VALUES (?,?,?)";
+            $sql = "INSERT INTO MEMBRES ( pseudoMembre, mailMembre, mdpMembre, confirmCompte,confirmKey, estadmin) VALUES (?,?,?,?,?,?)";
             
             // Préparation de la requête
             $req_prep = Model::$pdo->prepare($sql);
 
-            $values = array( $this->pseudoMembre, $this->mail, $this->mdp);
+            $values = array( $this->pseudoMembre, $this->mailMembre, $this->mdpMembre, 0 , $this->confirmKey, 0);
             // On donne les valeurs et on exécute la requête	 
             $req_prep->execute($values);
             
@@ -45,32 +60,55 @@ class ModelMembres {
 
     
 
-    public static function verifMembre($formconnexion, $mailconnect, $mdpconnect){
+    public static function verifMembre( $mailconnect, $mdpconnect){
 
-        if (isset($formconnexion)) {
+            $mailconnect =htmlspecialchars($mailconnect);
+            $mdpconnect=sha1($mdpconnect);
+            
             //verifie si le mdp et le mail sont bon
             if (!empty($mdpconnect) AND !empty($mailconnect)) {
-                $requser = $bdd->prepare("SELECT * FROM membres WHERE mail = ? AND motdepasse = ?");
+                if(!ModelMembres::userexist($mailconnect))
+                    return "l'utilisateur n'existe pas !";
+                
+                $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre = ? AND mdpMembre = ?");
                 $requser->execute(array($mailconnect,$mdpconnect));
-                $userexist = $requser->rowCount();
-                if($userexist == 1){
+                $exist = $requser->rowCount();
+                if($exist == 1){
                     //creation de session et redirection
                     $userinfo = $requser->fetch();
-                    $_SESSION['numMembre'] = $userinfo['numMembre'];
-                    $_SESSION['pseudoMembre'] = $userinfo['pseudoMembre'];
-                    $_SESSION['mailMembre'] = $userinfo['mailMembre'];
-                    $membre = new ModelMembres(array("pseudoMembre"=>$_SESSION['pseudoMembre'],"mailMembre"=>$_SESSION['mailMembre'],"mdpMembre"=>$mdpconnect));
-                    $membre->setnumMembre($_SESSION['numMembre']);
-                    header("Location: index.php?action=Home");
+                    $membre = new ModelMembres($userinfo['pseudoMembre'],$mailconnect,$mdpconnect,$userinfo['confirmKey']);
+                    $membre->set("numMembre",$userinfo['numMembre']);
+                    $membre->set("confirmCompte",$userinfo['confirmCompte']);
+                    return $membre;
+                    
                 }
                 else{
-                    $erreur = "Mauvais mail ou mot de passe !";
+                   return "Mauvais mail ou mot de passe !";
                 }
             }
             else{
-                $erreur = "Tous les champs doivent être complété !";
+                return "Tous les champs doivent être complété !";
             }
-        }
+
+    
+    }
+
+    
+
+    public static function getwithmail($mailconnect,$valeur){
+        $requser = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
+        $requser->execute(array($mailconnect));
+        $user = $requser->fetch();
+        if(empty($user))
+            return 2;
+        return $user[$valeur];
+    }
+
+    
+
+    public static function compteconfirmer($mail,$Key){
+        $updateuser = Model::$pdo->prepare("UPDATE MEMBRES SET confirmCompte = 1 WHERE mailMembre = ? AND confirmKey = ?");
+        $updateuser->execute(array($mail,$Key));
     }
 
     private function setnumMembre($numMembre){
@@ -79,7 +117,7 @@ class ModelMembres {
 
 
     public static function userexist($mail){
-        $reqmail = $bdd->prepare("SELECT * FROM membres WHERE mail= ?");
+        $reqmail = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE mailMembre= ?");
         $reqmail->execute(array($mail));
         $mailexist = $reqmail->rowCount();
         if ($mailexist == 0){
@@ -89,5 +127,21 @@ class ModelMembres {
             return true;
         }
     }
+
+    public static function commandeAll($numMembre){
+        $req = Model::$pdo->prepare("SELECT * FROM MEMBRES WHERE numMembre= ?");
+        $req->execute(array($numMembre));
+    }
+
+    public static function updateMembre($categorie,$valeur){
+        $req = Model::$pdo->prepare("UPDATE MEMBRES SET $categorie = ? WHERE numMembre = ?");
+        $req->execute(array($valeur,$_SESSION['numMembre']));
+    }
+
+    public static function supprimerMembre(){
+        $req = Model::$pdo->prepare("DELETE FROM MEMBRES WHERE numMembre = ?");
+        $req->execute(array($_SESSION['numMembre']));
+    }
 }
+
 ?>
