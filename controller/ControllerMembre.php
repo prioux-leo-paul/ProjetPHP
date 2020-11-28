@@ -1,7 +1,7 @@
 <?php
 
 require_once File::buildpath(array("model","ModelMembres.php")); // chargement du modèle
-
+require_once File::buildpath(array("lib","Security.php"));
 
 class ControllerMembre {
     protected static $object= "membres";
@@ -30,8 +30,8 @@ class ControllerMembre {
         $pseudo = htmlspecialchars($_POST['pseudo']);
         $mail = htmlspecialchars($_POST['mail']);
         $mail2 = htmlspecialchars($_POST['mail2']);
-        $mdp = sha1($_POST['mdp']);
-        $mdp2 = sha1($_POST['mdp2']);
+        $mdp = Security::hacher($_POST['mdp']);
+        $mdp2 = Security::hacher($_POST['mdp2']);
         $pseudolength = strlen($pseudo);
         if (!empty($pseudo) AND !empty($mail) AND !empty($mail2) AND !empty($mdp) AND !empty($mdp2)) {
             //verification des info
@@ -65,22 +65,22 @@ class ControllerMembre {
                                     mail($mail,"Confirmation de compte",$message,$header);
                                     header("Location: index.php?action=formlogin");
                                 }else {
-                                    echo "Vos mot de passe ne corresponde pas !";
+                                    echo "<p> Vos mot de passe ne corresponde pas ! </p>";
                                 }
                             }else {
-                                echo "Adresse mail déjà utilisée !";
+                                echo "<p> Adresse mail déjà utilisée ! </p>";
                             }
                         }else {
-                            echo "Votre adresse mail n'est pas valide !";
+                            echo "<p> Votre adresse mail n'est pas valide ! </p>";
                         }
                     }else {
-                        echo "Vos adresse mail ne corresponde pas !";
+                        echo "<p> Vos adresse mail ne corresponde pas ! </p>";
                     }    
             } else {
-                echo "Votre pseudo doit contenir moins de 255 charactère !";
+                echo "<p> Votre pseudo doit contenir moins de 255 charactère ! </p>";
             }
         } else{ 
-            echo '<p>Tous les champs doivent etre complété !</p>';
+            echo '<p> Tous les champs doivent etre complété ! </p>';
 
         }
     }
@@ -105,11 +105,12 @@ class ControllerMembre {
                 $_SESSION['pseudoMembre'] = $membre->get("pseudoMembre");
                 $_SESSION['mailMembre'] = $mailconnect;
                 $_SESSION['numMembre'] = $membre->get("numMembre");
+                $_SESSION['estadmin'] = $membre->get("estadmin");
                 header("Location: index.php?action=profile");
                 
             }
             else{
-                echo "<p>Votre compte n'es toujours pas confirmer</p>";
+                echo "<p> Votre compte n'es toujours pas confirmer </p>";
             }
         }
         else{
@@ -181,7 +182,7 @@ class ControllerMembre {
             header("Location: index.php?action=profile");
         }
         else {
-            echo "veuillez remplir au moins un champs !";
+            echo "<p> veuillez remplir au moins un champs ! </p>";
         }
 
     }
@@ -211,6 +212,13 @@ class ControllerMembre {
         require File::buildpath(array("view","view.php"));
     }
 
+    //partie admin
+    public static function Home2(){
+        $view = "Homeadmin";
+        $pagetitle = "Page d'acceuil";
+        require File::buildpath(array("view","view2.php"));
+    }
+    
     
 }
 ?>

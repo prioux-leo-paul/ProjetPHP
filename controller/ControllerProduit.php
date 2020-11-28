@@ -23,7 +23,7 @@ class ControllerProduit {
 
     public static function allproduit(){
         $view = "filtre";
-        $pagetile = "Produits";
+        $pagetitle = "Produits";
         require (File::buildpath(array("view","view.php")));
         $tab = ModelProduits::selectAll();
         echo "<div class =\"divProduit\">";
@@ -71,10 +71,15 @@ class ControllerProduit {
         }
 
         echo "<p> votre produit a été mis dans votre panier ! </p>";
-
+    
     }
 
     public static function supprimerArticle($nump){
+        ControllerProduit::supprimerArticle2($nump);
+        header("Location: index.php?controller=produit&action=voirpanier");
+    }
+
+    public static function supprimerArticle2($nump){
         //Si le panier existe
         
            //Nous allons passer par un panier temporaire
@@ -101,10 +106,9 @@ class ControllerProduit {
            //On remplace le panier en session par notre panier temporaire à jour
            $_SESSION['panier'] =  $tmp;
            //On efface notre panier temporaire
-           unset($tmp);
-           header("Location: index.php?controller=produit&action=voirpanier");
-        
+           unset($tmp);        
     }
+    
 
     public static function showproduct($param){
         $current_product = ModelProduits::selectPrimary($param);
@@ -112,7 +116,7 @@ class ControllerProduit {
         $current_category = ModelCategories::selectPrimary($current_numcategory);
         $view = "produitgenerique";
         $nump = $param;
-        $pagetile = $current_product->get("nomProduit");
+        $pagetitle = $current_product->get("nomProduit");
         require (File::buildpath(array("view","view.php")));
     }
 
@@ -178,15 +182,166 @@ class ControllerProduit {
         echo "<div class =\"divProduit\">";
         foreach($tab as $u){ 
             if ((int)$u->get("numCategorie") == (int)$_POST['categorie'] && $u->get("prix") <= $prixComp) {
-                echo "<div class =\"containerProduit\">";
+                echo "<div class =\"containerProduit\"><a href=\"index.php?controller=produit&action=showproduct&param=".$u->get("numProduit")."\">";
                 echo "<img src=\"" . $u->get("imgPath"). "\">";
                 echo "<div class=\"nomProduit\">" . $u->get("nomProduit") . "</div>";
                 echo "<div class=\"descriptionProduit\">" . $u->get("descriptionProduit") . "</div>";
-                echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</div>";
+                echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</a></div>";
                 echo "</div>";
             }
         }
         echo "</div>";
+    }
+
+    //partie admin
+
+    public static function allproduitadmin(){
+        if(isset($_SESSION['estadmin'])){
+            if($_SESSION['estadmin'] == 1){
+                $view = "filtreadmin";
+                $pagetitle = "Produits admin";
+                require (File::buildpath(array("view","view2.php")));
+                $tab = ModelProduits::selectAll();
+                echo "<div class =\"divProduit\">";
+                foreach($tab as $u){
+                        echo "<div class =\"containerProduit\"><a href=\"index.php?controller=produit&action=showproductadmin&param=".$u->get("numProduit")."\">";
+                        echo "<img src=\"" . $u->get("imgPath"). "\">";
+                        echo "<div class=\"nomProduit\">" . $u->get("nomProduit") . "</div>";
+                        echo "<div class=\"descriptionProduit\">" . $u->get("descriptionProduit") . "</div>";
+                        echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</a></div>";
+                        echo "</div>";
+                }
+                echo "</div>";
+
+            }
+        }
+        
+    }
+
+    public static function selectedproduitadmin(){
+        if(isset($_SESSION['estadmin'])){
+            if($_SESSION['estadmin'] == 1){
+                $view = "filtreadmin";
+                $pagetitle = "Produits admin";
+                require (File::buildpath(array("view","view2.php")));
+                $tab = ModelProduits::selectAll();
+                $prixComp = 5000;
+
+                if ($_POST['prix'] > 1 && $_POST['prix'] < 101) {
+                    $prixComp = $_POST['prix'];
+                }
+
+                echo "<div class =\"divProduit\">";
+                foreach($tab as $u){ 
+                    if ((int)$u->get("numCategorie") == (int)$_POST['categorie'] && $u->get("prix") <= $prixComp) {
+                        echo "<div class =\"containerProduit\"><a href=\"index.php?controller=produit&action=showproductadmin&param=".$u->get("numProduit")."\">";
+                        echo "<img src=\"" . $u->get("imgPath"). "\">";
+                        echo "<div class=\"nomProduit\">" . $u->get("nomProduit") . "</div>";
+                        echo "<div class=\"descriptionProduit\">" . $u->get("descriptionProduit") . "</div>";
+                        echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</a></div>";
+                    }
+                }
+                echo "</div>";
+            }
+        }
+    }
+
+    public static function showproductadmin($param){
+        if(isset($_SESSION['estadmin'])){
+            if($_SESSION['estadmin'] == 1){
+                
+                $current_product = ModelProduits::selectPrimary($param);
+                $current_numcategory = $current_product->get("numCategorie");
+                $current_category = ModelCategories::selectPrimary($current_numcategory);
+
+                if(isset($_POST['envoyer'])){
+                    if(isset($_POST['nomp']) && !empty($_POST['nomp'])){
+                        $array=array("numProduit" => $param,"nomProduit" => $_POST['nomp'],);
+                        ModelProduits::update($array);
+                    }
+                    if(isset($_POST['prixp']) && !empty($_POST['prixp'])){
+                        $array=array("numProduit" => $param,"prix" => $_POST['prixp'],);
+                        ModelProduits::update($array);
+                    }
+                    if(isset($_POST['descrip']) && !empty($_POST['descrip'])){
+                        $array=array("numProduit" => $param,"descriptionProduit" => $_POST['descrip'],);
+                        ModelProduits::update($array);
+                    }
+                    
+                }
+                if(isset($_POST['envoyer2'])){
+                        if(isset($_POST['q']) && !empty($_POST['q'])){
+                            $q = $_POST['q'] ;
+                            if (is_array($q)){
+                                $stock = array();
+                                $i=0;
+                                foreach ($q as $contenu){
+                                   $stock[$i++] = intval($contenu);
+                                }
+                             }
+                             else
+                                 $q = intval($q);
+                            $t = $_POST['t'] ;
+                            if (is_array($q)){
+                                $taille = array();
+                                $i=0;
+                                foreach ($t as $contenu){
+                                    $taille[$i++] = $contenu;
+                                }
+                            }
+                            
+                    
+                            for ($i = 0 ; $i < count($stock) ; $i++)
+                            {
+                            ModelTailles::updatestock(round($stock[$i]),$param,$taille[$i]);
+                            }
+                        }
+                }
+                if(isset($_POST['envoyer3'])){
+                    if(isset($_POST['newtaille']) && !empty($_POST['newtaille']) && isset($_POST['newstock']) && !empty($_POST['newstock'])){
+                        $test = ModelTailles::tailleexist($param,$_POST['newtaille']);
+                        if(!$test){
+                            $taille = new ModelTailles($param,$_POST['newtaille'],$_POST['newstock']);
+                            $saveok = $taille->save();
+                            if($saveok)
+                                echo "Nouvelle taille enregistrer ! ";
+                        }
+                        else
+                            ModelTailles::updatestock(round(intval($_POST['newstock'])),$param,round(intval($_POST['newtaille'])));
+
+
+                    }
+                }
+                $current_product = ModelProduits::selectPrimary($param);
+                $current_numcategory = $current_product->get("numCategorie");
+                $current_category = ModelCategories::selectPrimary($current_numcategory);
+                $view = "produitgeneriqueadmin";
+                $nump = $param;
+                $pagetitle = $current_product->get("nomProduit");
+                require (File::buildpath(array("view","view2.php")));
+            }
+        }
+    }
+
+    public static function supprimerarticleadmin($param){
+        if(isset($_SESSION['estadmin'])){
+            if($_SESSION['estadmin'] == 1){
+                ModelProduits::delete($param);
+                ModelTailles::delete($param);
+                header("Location: index.php?controller=produit&action=allproduitadmin");
+
+            }
+        }
+    }
+
+    public static function supptailleadmin($param){
+        if(isset($_SESSION['estadmin'])){
+            if($_SESSION['estadmin'] == 1){
+                ModelTailles::supprimertaille($param);
+                header("Location: index.php?controller=produit&action=allproduitadmin");
+                
+            }
+        }
     }
 }
 

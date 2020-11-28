@@ -5,7 +5,7 @@ require_once File::buildpath(array("model","ModelMembres.php")); // chargement d
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="view/view2.css">
+    <link rel="stylesheet" type="text/css" href="view/view.css">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
     <title><?php echo $pagetitle ;?></title>
 </head>
@@ -20,7 +20,14 @@ require_once File::buildpath(array("model","ModelMembres.php")); // chargement d
                 <div class="first-box">
                     <ul>
                         <li><a href="index.php?action=Home">Home</a></li>
+                        <?php 
+                        if(isset($_SESSION['estadmin'])){
+                        if($_SESSION['estadmin'] == 1){
+                        ?>
+                        <li><a href="index.php?action=Home2">Admin page</a></li>
                         <?php
+                        }
+                        }
                         if(isset($_SESSION['numMembre'])){
                         ?>
                         <li><a href="index.php?action=profile">Profile</a></li>
@@ -45,6 +52,7 @@ require_once File::buildpath(array("model","ModelMembres.php")); // chargement d
             </div>
             <div class="full-page" align="center">
             <?php
+       
                 $filepath = File::buildpath(array("view", static::$object, "$view.php"));
                 require $filepath;
                 

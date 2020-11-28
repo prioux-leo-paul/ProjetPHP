@@ -1,6 +1,7 @@
 <?php
 
 require_once File::buildpath(array("model","Model.php"));
+require_once File::buildpath(array("lib","Security.php"));
 class ModelMembres extends Model {
     protected static $object = "membres";
     protected static $primary = "numMembre";
@@ -48,7 +49,7 @@ class ModelMembres extends Model {
                 echo $e->getMessage(); // affiche un message d'erreur
             } else {
                 $lien = File::buildpath(array("controller","routeur.php?action=formlogin"));
-                echo "Votre compte a bien été creer ! <a href=\"".$lien."\">Me connecter</a>";
+                echo " Votre compte a bien été creer ! <a href=\"".$lien."\">Me connecter</a>";
             }
             die();
         }
@@ -63,7 +64,7 @@ class ModelMembres extends Model {
     public static function verifMembre( $mailconnect, $mdpconnect){
 
             $mailconnect =htmlspecialchars($mailconnect);
-            $mdpconnect=sha1($mdpconnect);
+            $mdpconnect=Security::hacher($mdpconnect);
             
             //verifie si le mdp et le mail sont bon
             if (!empty($mdpconnect) AND !empty($mailconnect)) {
@@ -79,15 +80,16 @@ class ModelMembres extends Model {
                     $membre = new ModelMembres($userinfo['pseudoMembre'],$mailconnect,$mdpconnect,$userinfo['confirmKey']);
                     $membre->set("numMembre",$userinfo['numMembre']);
                     $membre->set("confirmCompte",$userinfo['confirmCompte']);
+                    $membre->set("estadmin",$userinfo['estadmin']);
                     return $membre;
                     
                 }
                 else{
-                   return "Mauvais mail ou mot de passe !";
+                   return "<p> Mauvais mail ou mot de passe ! </p>";
                 }
             }
             else{
-                return "Tous les champs doivent être complété !";
+                return "<p> Tous les champs doivent être complété ! </p>";
             }
 
     
@@ -142,6 +144,8 @@ class ModelMembres extends Model {
         $req = Model::$pdo->prepare("DELETE FROM membres WHERE numMembre = ?");
         $req->execute(array($_SESSION['numMembre']));
     }
+
+    
 }
 
 ?>

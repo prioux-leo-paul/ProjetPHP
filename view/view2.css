@@ -10,7 +10,7 @@
     display: flex;
 }
 input[type="number"] {
-    width:30px;
+    width:40px;
  }
 .divProduit{
     margin-left: 20%;
@@ -51,7 +51,7 @@ input[type="number"] {
 .container .box{    
     display:flex;
     flex-direction: column;
-    background-color: #4b4276;
+    background-color: #A03017;
     width: 200px;
     height: 100%;
     position: fixed;
@@ -64,7 +64,7 @@ input[type="number"] {
     border-top: 1px solid rgba(255,255,255,0.05);
 }
 .container .box .first-box ul li:hover{
-    background-color: #594f8d;
+    background-color: #7D2410;
 }
 .container .box .first-box ul li:hover a{
     color: white;
@@ -76,7 +76,7 @@ input[type="number"] {
     color: #bdb8d7;
 }
 .container .box .title{
-    height: 70px;
+    height: 110px;
 }
 .container .box .title h2{
     color:white;
@@ -94,7 +94,7 @@ input[type="number"] {
   .container .box .first-box .social_media a{
     display: block;
     width: 40px;
-    background: #594f8d;
+    background: #7D2410;
     height: 40px;
     line-height: 45px;
     text-align: center;
@@ -107,7 +107,7 @@ input[type="number"] {
       margin-top: 25%;
 }
 .container .box .first-box .social_media a:hover{
-      background-color: #594f8d;
+      background-color: #7D2410;
 }
 .container .box .first-box .social_media a:hover i{
     color: white;

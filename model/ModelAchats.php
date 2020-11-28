@@ -15,10 +15,36 @@ class ModelAchats extends Model {
             $this->numClient = $numClient;
             $this->numProduit = $numProduit;
             $this->qteAchat = $qteAchat;
-            $this->dateAchat = getdate();
+          
+            $this->dateAchat = date('Y-m-d',strtotime("now"));
             $this->taille = $taille;
         }
     }
+
+    public function save() {
+        try {
+            $sql = "INSERT INTO achats ( numClient, numProduit, qteAchat, DateAchat,taille) VALUES (?,?,?,?,?)";
+            
+            // Préparation de la requête
+            $req_prep = Model::$pdo->prepare($sql);
+
+            $values = array( $this->numClient, $this->numProduit, $this->qteAchat, $this->dateAchat, $this->taille);
+            // On donne les valeurs et on exécute la requête	 
+            $req_prep->execute($values);
+            return true ;
+            
+        } catch (PDOException $e) {
+            if (Conf::getDebug()) {
+                echo $e->getMessage(); // affiche un message d'erreur
+            } else {
+                $lien = File::buildpath(array("controller","routeur.php?action=formlogin"));
+                echo "Votre compte a bien été creer ! <a href=\"".$lien."\">Me connecter</a>";
+            }
+            die();
+        }
+    }
+
+    
 
     public function get($nom_attribut) {
         if (property_exists($this, $nom_attribut))
