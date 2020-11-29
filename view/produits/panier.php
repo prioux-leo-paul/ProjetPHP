@@ -68,7 +68,8 @@
         
     }
     echo " <td><tr>Montant global : ".ControllerProduit::MontantGlobal()."</tr>";
-    echo "<td><a href=\"index.php?controller=achat&action=formcommander\">Commander</a></tr></td>";
+    if(!empty($_SESSION['panier']['libelleProduit']))
+        echo "<td><a href=\"index.php?controller=achat&action=formcommander\">Commander</a></tr></td>";
 
     
 ?>
