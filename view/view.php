@@ -5,7 +5,7 @@ require_once File::buildpath(array("model","ModelMembres.php")); // chargement d
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="view/view.css">
+    <link rel="stylesheet" type="text/css" href="view/viewdd.css">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
     <title><?php echo $pagetitle ;?></title>
 </head>

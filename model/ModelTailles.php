@@ -88,6 +88,13 @@ class ModelTailles extends Model {
             }
         }
     }
+    public static function updatestock2($new_stock,$nump,$taille){
+        $sql2 = "UPDATE tailles SET stock = ? WHERE numProduit= ? AND taille = ?";
+            // Préparation de la requête
+        $req_prep = Model::$pdo->prepare($sql2);
+        $req_prep->execute(array($new_stock,$nump,$taille));
+        
+    }
 
     
 

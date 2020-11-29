@@ -18,8 +18,9 @@ class ModelLivraisons extends Model{
     }
 
 
-    public function save() {
+    /*public function save() {
         try {
+            
             $sql = "INSERT INTO livraison ( numAchat, adresseLivraison, dateLivraison) VALUES (?,?,?)";
             
             // Préparation de la requête
@@ -40,7 +41,7 @@ class ModelLivraisons extends Model{
             }
             die();
         }
-    }
+    }*/
 
     public function get($nom_attribut) {
         if (property_exists($this, $nom_attribut))

@@ -150,7 +150,7 @@ class ControllerProduit {
                 }
            }
            else
-           supprimerArticle($libelleProduit);
+           ControllerProduit::supprimerArticle($nump);
         }
         else
         echo "<p> Un problème est survenu rééssayez. </p>";
@@ -293,7 +293,10 @@ class ControllerProduit {
                     
                             for ($i = 0 ; $i < count($stock) ; $i++)
                             {
-                            ModelTailles::updatestock(round($stock[$i]),$param,$taille[$i]);
+                            if(round($stock[$i]) >= 0){
+                                ModelTailles::updatestock2(round($stock[$i]),$param,$taille[$i]);
+                            }
+                            
                             }
                         }
                 }

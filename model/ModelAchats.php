@@ -21,7 +21,7 @@ class ModelAchats extends Model {
         }
     }
 
-    public function save() {
+    /*public function save() {
         try {
             $sql = "INSERT INTO achats ( numClient, numProduit, qteAchat, DateAchat,taille) VALUES (?,?,?,?,?)";
             
@@ -42,7 +42,7 @@ class ModelAchats extends Model {
             }
             die();
         }
-    }
+    }*/
 
     
 

@@ -20,9 +20,17 @@ class ControllerMembre {
     }
 
     public static function formregister() {
-        $view = "register";
+        $view = "update_create";
         $pagetitle = "S'enregistrer";
+        $pseudoMembreHTML= "";
+        $mailMembreHTML= "";
+        $mdpMembreHTML= "";
+        $primary_proprety = "required";
+        $current_action = "register";
         require File::buildpath(array("view","view.php"));
+        /*$view = "register";
+        $pagetitle = "S'enregistrer";
+        require File::buildpath(array("view","view.php"));*/
     }
 
     public static function register(){
@@ -154,16 +162,25 @@ class ControllerMembre {
 
     public static function formediterprofile(){
         $pagetitle = "Editer Profil";
-        $view = "editerprofile";
+        $view = "update_create";
+        $pseudoMembreHTML= $_SESSION['pseudoMembre'];
+        $mailMembreHTML= $_SESSION['mailMembre'];
+        $mdpMembreHTML= "";
+        $primary_proprety = "readonly";
+        $current_action = "edit";
         require File::buildpath(array("view","view.php"));
+        /*
+        $pagetitle = "Editer Profil";
+        $view = "editerprofile";
+        require File::buildpath(array("view","view.php"));*/
     }
 
     public static function editerprofile(){
         ControllerMembre::formediterprofile();
-        $newpseudo = $_POST['newpseudo'];
-        $newmail = $_POST['newmail'];
-        $newmdp1 = $_POST['newmdp1'];
-        $newmdp2 = $_POST['newmdp2'];
+        $newpseudo = $_POST['pseudo'];
+        //$newmail = $_POST['mail'];
+        $newmdp1 = Security::hacher($_POST['mdp']);
+        $newmdp2 = Security::hacher($_POST['mdp2']);
         
         
         if(isset($_SESSION['numMembre'])){

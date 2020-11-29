@@ -175,8 +175,10 @@ class Model {
             $into_string = '(' . join(',',$attributes) . ')';
             
             // Rajoute ":" avant les attributs
+            if($table_name!="livraison"){
             function my_prepend($s) { 
                 return ":" . $s;                
+            }
             }
             $values_string = '(' . join(',', array_map("my_prepend",$attributes)) . ')';            
             
