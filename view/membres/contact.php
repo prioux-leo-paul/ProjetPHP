@@ -1,7 +1,7 @@
 <html>
 <body>
 <?php
-    if(isset($_POST['email']) && isset($_POST['objet']) && isset($_POST['message'])){
+    if(isset($_POST['email']) && isset($_POST['objet']) && isset($_POST['message']) && !empty($_POST['email']) && !empty($_POST['objet']) && !empty($_POST['message'])){
         $header="MIME-Version: 1.0\r\n";
         $header.='From: "site.com"<lp.prioux@gmail.com>'."\n";
         $header.='Content-Type:text/html; cherset="uft_8"'."\n";
@@ -19,12 +19,12 @@
        
     }
     else {
-        if(isset($_POST['email']))
+        if(isset($_POST['email']) && isset($_POST['objet']) && isset($_POST['message']) && (empty($_POST['email']) || empty($_POST['objet']) || empty($_POST['message'])))
             echo "<p> Veuillez remplir tous les chmaps !</p>";
     }
     ?>
     
-    <form method="post" action="index.php?action=contact">
+    <form method="POST" action="index.php?action=contact">
         <ul>
             <li><h2> Nous contactez</h2><li>
             <li><label>Votre mail : </label></li>

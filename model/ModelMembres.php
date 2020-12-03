@@ -20,6 +20,8 @@ class ModelMembres extends Model {
             $this->mailMembre = $mail;
             $this->mdpMembre = $mdp;
             $this->confirmKey = $Key;
+            $this->confirmCompte = 0;
+            $this->estadmin = 1;
        }
     }
     public function get($nom_attribut) {
@@ -33,7 +35,7 @@ class ModelMembres extends Model {
     }
 
     
-    public function save() {
+    /*public function save() {
         try {
             $sql = "INSERT INTO membres ( pseudoMembre, mailMembre, mdpMembre, confirmCompte,confirmKey, estadmin) VALUES (?,?,?,?,?,?)";
             
@@ -53,7 +55,7 @@ class ModelMembres extends Model {
             }
             die();
         }
-    }
+    }*/
 
     public function ajouterPanier($produit){
         $this->panierMembre = array($produit,$this->panierMembre);
