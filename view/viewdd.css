@@ -114,7 +114,12 @@ input[type="number"] {
 }
 .container .full-page{
     margin-left: 200px;
-    width: 100%;
+    
+    align-content: center;
+}
+.test{
+    width: 100% - 200px;
+    text-align: center;
 }
 
 

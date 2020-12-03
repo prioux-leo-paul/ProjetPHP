@@ -153,7 +153,7 @@ class ControllerProduit {
            ControllerProduit::supprimerArticle($nump);
         }
         else
-        echo "<p> Un problème est survenu rééssayez. </p>";
+        $erreur = "<p> Un problème est survenu rééssayez. </p>";
      }
 
     public static function MontantGlobal(){
@@ -306,8 +306,7 @@ class ControllerProduit {
                         if(!$test){
                             $taille = new ModelTailles($param,$_POST['newtaille'],$_POST['newstock']);
                             $saveok = $taille->save();
-                            if($saveok)
-                                echo "Nouvelle taille enregistrer ! ";
+                            
                         }
                         else
                             ModelTailles::updatestock(round(intval($_POST['newstock'])),$param,round(intval($_POST['newtaille'])));

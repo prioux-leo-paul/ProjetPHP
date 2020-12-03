@@ -34,7 +34,7 @@ class ControllerMembre {
     }
 
     public static function register(){
-        require_once File::buildpath(array("model","ModelMembres.php"));
+        
         $pseudo = htmlspecialchars($_POST['pseudo']);
         $mail = htmlspecialchars($_POST['mail']);
         $mail2 = htmlspecialchars($_POST['mail2']);
@@ -45,7 +45,7 @@ class ControllerMembre {
             //verification des info
             if ($pseudolength <= 20) {
                 if(strlen($mdp) > 200){
-                    echo "<p> votre mot de passe est trop long </p>";
+                    $erreur = "<p> votre mot de passe est trop long </p>";
                 }
                     if($mail == $mail2){
                         if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
@@ -76,24 +76,32 @@ class ControllerMembre {
                                     mail($mail,"Confirmation de compte",$message,$header);
                                     header("Location: index.php?action=formlogin");
                                 }else {
-                                    echo "<p> Vos mot de passe ne corresponde pas ! </p>";
+                                    $erreur ="<p> Vos mot de passe ne corresponde pas ! </p>";
                                 }
                             }else {
-                                echo "<p> Adresse mail déjà utilisée ! </p>";
+                                $erreur ="<p> Adresse mail déjà utilisée ! </p>";
                             }
                         }else {
-                            echo "<p> Votre adresse mail n'est pas valide ! </p>";
+                            $erreur = "<p> Votre adresse mail n'est pas valide ! </p>";
                         }
                     }else {
-                        echo "<p> Vos adresse mail ne corresponde pas ! </p>";
+                        $erreur = "<p> Vos adresse mail ne corresponde pas ! </p>";
                     }    
             } else {
-                echo "<p> Votre pseudo doit contenir moins de 20 charactère ! </p>";
+                $erreur = "<p> Votre pseudo doit contenir moins de 20 charactère ! </p>";
             }
         } else{ 
-            echo '<p> Tous les champs doivent etre complété ! </p>';
+            $erreur = '<p> Tous les champs doivent etre complété ! </p>';
 
         }
+        $view = "update_create";
+        $pagetitle = "S'enregistrer";
+        $pseudoMembreHTML= "";
+        $mailMembreHTML= "";
+        $mdpMembreHTML= "";
+        $primary_proprety = "required";
+        $current_action = "register";
+        require File::buildpath(array("view","view.php"));
     }
 
     public static function formlogin() {
@@ -103,8 +111,7 @@ class ControllerMembre {
     }
 
     public static function login(){
-        ControllerMembre::formlogin();
-        require_once File::buildpath(array('model','ModelMembres.php'));
+        
         
         $mailconnect = $_POST['mailconnect'];
         $mdpconnect = $_POST['mdpconnect'];
@@ -121,13 +128,15 @@ class ControllerMembre {
                 
             }
             else{
-                echo "<p> Votre compte n'es toujours pas confirmer </p>";
+                $erreur =  '<p> Votre compte n\'es toujours pas confirmer </p>';
             }
         }
         else{
-            echo $membre;
+            $erreur = $membre;
         }
-        
+        $pagetitle = "Se connecter";
+        $view = "login";
+        require File::buildpath(array("view","view.php"));
         
     }
 
@@ -139,12 +148,14 @@ class ControllerMembre {
                 if( ModelMembres::getwithmail($mail,'confirmCompte') == 0){
                     if(ModelMembres::getwithmail($mail,'confirmKey') == $key)
                         ModelMembres::compteconfirmer($mail,$key);
+                        
                     echo "<p>Votre compte a bien été confirmé !</p>";
+                    echo "<a href=\"index.php?action=login\">connexion</a>";
                 }else{
                     echo "<p>Votre compte a déja été confirmé !</p>";
                 }
             }else{
-                    echo "<p>l'utilisateur n'existe pas !</p>";
+                    echo '<p> l\'utilisateur n\'existe pas !</p>';
                 }
     }
     
@@ -201,9 +212,7 @@ class ControllerMembre {
             }
             header("Location: index.php?action=profile");
         }
-        else {
-            echo "<p> veuillez remplir au moins un champs ! </p>";
-        }
+        
 
     }
     public static function supprofile(){

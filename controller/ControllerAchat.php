@@ -7,11 +7,13 @@ class ControllerAchat {
     protected static $object ="achats";
     public static function commander() {
     
-        ControllerAchat::formcommander();
            
         if(isset($_SESSION['numMembre'])){
 
-
+            if(empty($_POST['adr'])){
+                $erreur = "<p> votre adresse est vide </p>";
+            }
+            else{
             if(isset($_POST['liv']) && isset($_POST['adr'])){
                 $c = count($_SESSION['panier']['numProduit']);
                 
@@ -38,14 +40,14 @@ class ControllerAchat {
                                     $saveok2 = $livraison->save();
                                     
                                     if ($saveok && $saveok2 ){
-                                        echo "<p> Votre article ".$_SESSION['panier']['libelleProduit'][$i]." a bien été commandé </p>";
+                                        $erreur = "<p> Votre article ".$_SESSION['panier']['libelleProduit'][$i]." a bien été commandé </p>";
                                         $new_stock = $stock - $_SESSION['panier']['qteProduit'][$i];
                                         ModelTailles::updatestock($new_stock,$_SESSION['panier']['numProduit'][$i],$_SESSION['panier']['tailleProduit'][$i]);
                                         ControllerProduit::supprimerArticle2($_SESSION['panier']['numProduit'][$i]);
                                         
                                     }
                                     else 
-                                        echo "<p> Votre article ".$_SESSION['panier']['libelleProduit'][$i]." n'a pas été commandé, veuillez réessayé </p>";
+                                        $erreur = "<p> Votre article ".$_SESSION['panier']['libelleProduit'][$i]." n'a pas été commandé, veuillez réessayé </p>";
                                 } 
                             }
                         }
@@ -55,12 +57,17 @@ class ControllerAchat {
                 
                 
             }
+        }
             
         }
         else{
-            echo "<p> Vous n'êtes pas connecter ! </p>";
-            echo "<p><a href=\"index.php?action=Home\"> connexion</a></p>";
+            $erreur = "<p> Vous n'êtes pas connecter ! </p>";
+            $erreur += "<p><a href=\"index.php?action=Home\"> connexion</a></p>";
         }
+
+        $view = "formlivraison";
+        $pagetitle = "commander";
+        require (File::buildpath(array("view","view.php")));
         
     }
 

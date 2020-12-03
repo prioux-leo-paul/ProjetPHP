@@ -11,5 +11,9 @@
 
     </ul>
 </form>
+<?php
+if(isset($erreur))
+    echo $erreur;
+?>
 </body>
 </html>

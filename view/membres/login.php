@@ -1,6 +1,6 @@
 <html> 
     <body>
-        <div align="center">
+
                 <h2>Connexion</h2>
                 <form method="POST" action="index.php?action=login">
                     <input type="mail" name="mailconnect" placeholder="Mail">
@@ -11,6 +11,9 @@
                 </form>
                 <br>
                 Pas encore de compte ?<a href="index.php?action=formregister">S'inscrire</a>
-        </div>
+                <?php
+                if(isset($erreur))
+                    echo $erreur;
+                ?>
     </body>
 </html>

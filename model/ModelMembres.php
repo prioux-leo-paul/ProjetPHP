@@ -71,7 +71,7 @@ class ModelMembres extends Model {
             //verifie si le mdp et le mail sont bon
             if (!empty($mdpconnect) AND !empty($mailconnect)) {
                 if(!ModelMembres::userexist($mailconnect))
-                    return "l'utilisateur n'existe pas !";
+                    return "<p> l'utilisateur n'existe pas ! </p>";
                 
                 $requser = Model::$pdo->prepare("SELECT * FROM membres WHERE mailMembre = ? AND mdpMembre = ?");
                 $requser->execute(array($mailconnect,$mdpconnect));
@@ -87,6 +87,7 @@ class ModelMembres extends Model {
                     
                 }
                 else{
+                    
                    return "<p> Mauvais mail ou mot de passe ! </p>";
                 }
             }

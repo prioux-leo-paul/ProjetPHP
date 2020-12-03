@@ -58,7 +58,9 @@
                 <?php 
                 if($current_action =="register"){
                 echo "Déjà un compte ? <a href=\"index.php?action=formlogin\">Connexion</a>";
-                }
+				}
+				if(isset($erreur))
+					echo $erreur;
                 ?>
 		</div>
 	</body>

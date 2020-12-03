@@ -14,4 +14,6 @@ echo "<h2> Ma livraison </h2>";
 echo "<div>Adresse de livraison : ".$livraison_achat['adresseLivraison']."</div>";
 echo "<div>Date de livraison : ".$livraison_achat['dateLivraison']."</div>";
         
+if(isset($erreur))
+    echo $erreur;
     ?>
