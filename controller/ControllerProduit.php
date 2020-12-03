@@ -345,6 +345,72 @@ class ControllerProduit {
             }
         }
     }
+
+    public static function formajouterproduit(){
+        if(isset($_SESSION['estadmin'])){
+            if($_SESSION['estadmin'] == 1){
+                $view = "ajouterunproduit";
+                $pagetitle ="Ajouter un produit";
+                require (File::buildpath(array("view","view2.php")));
+            }
+        }
+    
+    }
+    public static function ajouterproduit(){
+        if(isset($_SESSION['estadmin'])){
+            if($_SESSION['estadmin'] == 1){
+                if(isset($_POST['envoyer']) ){
+                    if(!empty($_POST['nom']) && !empty($_POST['prix']) && !empty($_POST['des']) && !empty($_POST['categorie']) && !empty($_FILES['photo'])){
+     
+                        $tailleMax = 2097152; //2097152 taille de 2 MO
+                        $extensionsValides = array('jpg','jpeg','gif','png');
+                        //comparaison de la taille
+                        if($_FILES['photo']['size'] <= $tailleMax){
+                            //recuperation de l'extension upload
+                            $extentionUpload =strtolower(substr(strrchr($_FILES['photo']['name'],'.'),1));
+                            //verif de l'extension
+                            if(in_array($extentionUpload,$extensionsValides)){
+                                $nomC = ModelCategories::selectPrimary($_POST['categorie']);
+                                $chemin ='Image/Produits/'.$nomC->get("nomCategorie").'/'.$_FILES['photo']['name'];
+                                //mettre dans le bon chemin
+                                
+                                $resultat = move_uploaded_file($_FILES['photo']['tmp_name'],$chemin);
+                                if($resultat){
+                                    $new_produit = new ModelProduits($_POST['nom'],$_POST['categorie'],$_POST['prix'],$_POST['des']);
+                                    $saveok = $new_produit->save();
+
+                                    if($saveok)
+                                        $erreur = "votre produit a bien été enregistrer";
+                                    else    
+                                        $erreur = "il y a eu une erreur";
+                                }
+                                else{
+                                    $erreur = "Erreur durant l'importation de votre photo !";
+                                }
+                            }
+                            else{
+                                $erreur = "Votre photo doit être au format jpg, jpeg, gif, png";
+                            }
+                        }
+                        else{
+                            $erreur = "Votre photo ne doit pas dépasser 2 Mo !";
+                        }
+
+                        
+
+                }
+                else
+                    $erreur = "vous devez remplir tous les champs";
+
+            }
+
+                $view = "ajouterunproduit";
+                $pagetitle ="Ajouter un produit";
+                require (File::buildpath(array("view","view2.php")));
+            }
+        }
+    }
+
 }
 
 

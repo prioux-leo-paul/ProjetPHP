@@ -7,13 +7,12 @@ class ModelProduits extends Model {
     private $nomProduit;
     private $numCategorie;
     private $prix;
-    private $taille;
     private $descriptionProduit;
     private $img;
 
-    public function __construct($numProduit = NULL,$nomProduit=NULL, $numCategorie=NULL,$prix=NULL,$stock=NULL,$tailleProduit=NULL,$descriptionProduit=NULL){
-        if (!is_null($numProduit) && !is_null($nomProduit) && !is_null($numCategorie) && !is_null($prix) && !is_null($stock) && !is_null($tailleProduit) && !is_null($descriptionProduit)){
-            $this->numProduit=$numProduit;
+    public function __construct($nomProduit=NULL, $numCategorie=NULL,$prix=NULL,$descriptionProduit=NULL){
+        if (!is_null($nomProduit) && !is_null($numCategorie) && !is_null($prix)  && !is_null($descriptionProduit)){
+
             $this->nomProduit=$nomProduit;
             $this->numCategorie=$numCategorie;
             $this->prix=$prix;

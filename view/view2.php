@@ -24,7 +24,9 @@ if(isset($_SESSION['estadmin'])){
                         
                         <li><a href="index.php?action=Home2">Home admin</a></li>
                         
+                        
                         <li><a href="index.php?controller=produit&action=allproduitadmin">Produits admin</a></li>
+                        <li><a href="index.php?controller=produit&action=ajouterproduit">Ajouter un produit</a></li>
                         <li><a href="index.php?action=logout">Deconnexion</a></li>
                        
                     </ul>
