@@ -43,7 +43,10 @@ class ControllerMembre {
         $pseudolength = strlen($pseudo);
         if (!empty($pseudo) AND !empty($mail) AND !empty($mail2) AND !empty($mdp) AND !empty($mdp2)) {
             //verification des info
-            if ($pseudolength <= 50) {
+            if ($pseudolength <= 20) {
+                if(strlen($mdp) > 200){
+                    echo "<p> votre mot de passe est trop long </p>";
+                }
                     if($mail == $mail2){
                         if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
                             $testmail = ModelMembres::userexist($mail);
@@ -85,7 +88,7 @@ class ControllerMembre {
                         echo "<p> Vos adresse mail ne corresponde pas ! </p>";
                     }    
             } else {
-                echo "<p> Votre pseudo doit contenir moins de 255 charactère ! </p>";
+                echo "<p> Votre pseudo doit contenir moins de 20 charactère ! </p>";
             }
         } else{ 
             echo '<p> Tous les champs doivent etre complété ! </p>';

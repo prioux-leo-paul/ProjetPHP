@@ -21,7 +21,7 @@ class ModelMembres extends Model {
             $this->mdpMembre = $mdp;
             $this->confirmKey = $Key;
             $this->confirmCompte = 0;
-            $this->estadmin = 1;
+            $this->estadmin = 0;
        }
     }
     public function get($nom_attribut) {
