@@ -67,7 +67,6 @@
         if(isset($erreur))
             echo $erreur;
 
-        echo $_POST['nom']."/".$_POST['prix']."/".$_POST['des'];
     }
     }
     ?>

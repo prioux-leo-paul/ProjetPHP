@@ -5,8 +5,8 @@ if(isset($_SESSION['estadmin'])){
         
         echo "
             <h2>Fiche produit admin</h2>
+            <img src=".$current_product->get("imgPath").">
             <form method=\"post\" action=\"index.php?controller=produit&action=showproductadmin&param=".$current_product->get("numProduit")."\">
-            
             <table>
             <tr><td><label>nom du produit : </label></td><td><input type=\"text\"  name=\"nomp\" value=\"".htmlspecialchars($current_product->get("nomProduit"))."\"/></td></tr>
             <tr><td>Categorie : ".$current_category->get("nomCategorie")."</td></tr>

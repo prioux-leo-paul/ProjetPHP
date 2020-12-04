@@ -115,7 +115,31 @@ input[type="number"] {
 .container .full-page{
     margin-left: 200px;
     width: 100%;
+    height: 100%;
+    position: fixed;
 }
+
+.parallax {
+    
+    background-image: url("../Image/accueil.jpg");
+    height: 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  
+  }
+
+.titlehome{
+    font-size: xx-large;
+    color: whitesmoke;
+}
+.blabla{
+    font-size: large;
+    color: whitesmoke;
+}
+}
+
 
 
 @media (max-height: 400px){

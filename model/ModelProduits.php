@@ -8,15 +8,16 @@ class ModelProduits extends Model {
     private $numCategorie;
     private $prix;
     private $descriptionProduit;
-    private $img;
+    private $imgPath;
 
-    public function __construct($nomProduit=NULL, $numCategorie=NULL,$prix=NULL,$descriptionProduit=NULL){
+    public function __construct($nomProduit=NULL, $numCategorie=NULL,$prix=NULL,$descriptionProduit=NULL, $imgPath=NULL){
         if (!is_null($nomProduit) && !is_null($numCategorie) && !is_null($prix)  && !is_null($descriptionProduit)){
 
             $this->nomProduit=$nomProduit;
             $this->numCategorie=$numCategorie;
             $this->prix=$prix;
             $this->descriptionProduit=$descriptionProduit;
+            $this->imgPath = $imgPath;
         }
     }
     public function set($nom_attribut,$valeur) {

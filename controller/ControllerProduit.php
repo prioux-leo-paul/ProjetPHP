@@ -29,7 +29,7 @@ class ControllerProduit {
         echo "<div class =\"divProduit\">";
         foreach($tab as $u){
                 echo "<div class =\"containerProduit\"><a href=\"index.php?controller=produit&action=showproduct&param=".$u->get("numProduit")."\">";
-                echo "<img src=\"" . $u->get("imgPath"). "\">";
+                echo "<img class=\"dimension_img\" src=\"" . $u->get("imgPath"). "\">";
                 echo "<div class=\"nomProduit\">" . $u->get("nomProduit") . "</div>";
                 echo "<div class=\"descriptionProduit\">" . $u->get("descriptionProduit") . "</div>";
                 echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</a></div>";
@@ -179,11 +179,13 @@ class ControllerProduit {
             $prixComp = $_POST['prix'];
         }
 
+      
         echo "<div class =\"divProduit\">";
         foreach($tab as $u){ 
             if ((int)$u->get("numCategorie") == (int)$_POST['categorie'] && $u->get("prix") <= $prixComp) {
+
                 echo "<div class =\"containerProduit\"><a href=\"index.php?controller=produit&action=showproduct&param=".$u->get("numProduit")."\">";
-                echo "<img src=\"" . $u->get("imgPath"). "\">";
+                echo "<img class=\"dimension_img\" src=\"" . $u->get("imgPath"). "\">";
                 echo "<div class=\"nomProduit\">" . $u->get("nomProduit") . "</div>";
                 echo "<div class=\"descriptionProduit\">" . $u->get("descriptionProduit") . "</div>";
                 echo "<div class=\"prixProduit\">" . $u->get("prix") . " EUR</a></div>";
@@ -192,6 +194,7 @@ class ControllerProduit {
         }
         echo "</div>";
     }
+
 
     //partie admin
 
@@ -376,7 +379,7 @@ class ControllerProduit {
                                 
                                 $resultat = move_uploaded_file($_FILES['photo']['tmp_name'],$chemin);
                                 if($resultat){
-                                    $new_produit = new ModelProduits($_POST['nom'],$_POST['categorie'],$_POST['prix'],$_POST['des']);
+                                    $new_produit = new ModelProduits($_POST['nom'],$_POST['categorie'],$_POST['prix'],$_POST['des'],$chemin);
                                     $saveok = $new_produit->save();
 
                                     if($saveok)

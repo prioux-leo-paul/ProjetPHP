@@ -88,6 +88,11 @@ class ControllerAchat {
         require (File::buildpath(array("view","view.php")));
     }
 
+    public static function allcommande(){
+        $view = "allcommande";
+        $pagetitle = "Mes commandes";
+        require (File::buildpath(array("view","view.php")));
+    }
 }
 
 ?>

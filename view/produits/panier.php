@@ -37,6 +37,7 @@
         <td colspan="4"><h2>Votre panier</h2></td>
     </tr>
     <tr>
+        <td>Aperçu</td>
         <td>Libellé</td>
         <td>Prix unitaire</td>
         <td>Quantité</td>
@@ -49,6 +50,8 @@
             ?>
             <tr>
             <?php
+            $produit_courant = ModelProduits::selectPrimary($_SESSION['panier']['numProduit'][$i]);
+            echo "<td> <img style=\"width : 70px;\" src=\"".$produit_courant->get("imgPath")."\"></td>";
             echo "<td> ".$_SESSION['panier']['libelleProduit'][$i]."</td>";
             echo "<td> ".$_SESSION['panier']['prixProduit'][$i]."</td>";
             echo "<td><input type=\"number\"  name=\"q[]\" value=\"".htmlspecialchars($_SESSION['panier']['qteProduit'][$i])."\"/></td>";
